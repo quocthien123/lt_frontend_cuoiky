@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
+import type { CSSProperties } from 'react'
 
-// Danh mục tin tức (mock data – sau này có thể lấy từ API)
 const categories = [
   { id: 'premier-league', name: 'Ngoại hạng Anh', path: '/league/premier-league' },
   { id: 'la-liga', name: 'La Liga', path: '/league/la-liga' },
@@ -14,41 +14,70 @@ const categories = [
 ];
 
 export default function Sidebar() {
+  return (
+    <aside >
+      <div>
+        <h2>Danh mục</h2>
 
-    return (
+        <ul>
+          {categories.map((cat) => (
+            <li key={cat.id}>
+              <Link
+                to={cat.path}
+                
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#2563eb'
+                  e.currentTarget.style.backgroundColor = '#eff6ff'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#374151'
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                }}
+              >
+                {cat.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
 
-        <aside className="w-64 bg-gray-50 border-r border-gray-200 min-h-screen hidden md:block">
-            <div className="p-4">
-
-                <h2 className="text-lg font-bold text-gray-800 md-4">Danh mục</h2>
-
-                <ul className="space-y-2">
-                    {categories.map((cat) => (
-                        <li key = {cat.id}>
-                            <Link
-                                to={cat.path}
-                                className="block px-3 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md transition"
-                            >
-                                {cat.name}
-                                </Link>  
-
-                        </li>
-                    ))}
-
-                </ul>
-
-                <div className="mt-8 pt-4 border-t border-gray-200">
-                    <h3 className="font-semibold text-gray-700 mb-3">Nhanh</h3>
-                    <div className="grid grid-cols-2 gap-2">
-                        <Link to="/results" className="text-center text-sm text-gray-600 hover:text-blue-600">KQ</Link>
-                        <Link to="/standings" className="text-center text-sm text-gray-600 hover:text-blue-600">BXH</Link>
-                        <Link to="/videos" className="text-center text-sm text-gray-600 hover:text-blue-600">Video</Link>
-                        <Link to="/premium" className="text-center text-sm text-yellow-600 font-medium">Premium</Link>
-
-                    </div>
-                     </div>
-            </div>
-
-        </aside>
-    )
+        <div>
+          <h3>Nhanh</h3>
+          <div>
+            <Link
+              to="/results"
+             
+              onMouseEnter={(e) => e.currentTarget.style.color = '#2563eb'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}
+            >
+              KQ
+            </Link>
+            <Link
+              to="/standings"
+     
+              onMouseEnter={(e) => e.currentTarget.style.color = '#2563eb'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}
+            >
+              BXH
+            </Link>
+            <Link
+              to="/videos"
+           
+              onMouseEnter={(e) => e.currentTarget.style.color = '#2563eb'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#4b5563'}
+            >
+              Video
+            </Link>
+            <Link
+              to="/premium"
+     
+              onMouseEnter={(e) => e.currentTarget.style.color = '#d97706'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#b45309'}
+            >
+              Premium
+            </Link>
+          </div>
+        </div>
+      </div>
+    </aside>
+  )
 }

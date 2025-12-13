@@ -1,0 +1,63 @@
+.header {
+    background-color: white;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+}
+.link {
+    text-decoration: none;
+    color: black;
+    font-size: large;
+    padding-left: 1rem;
+    font-weight: 500;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: black;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+.avatarrounded {
+  width: 20px;
+  height: 20px;
+  border: 3px solid black; 
+  border-radius: 50%;
+  padding: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+.dropdown {
+  position: relative;
+  display: inline-block; /* Giúp khối bao vừa kích thước ảnh */
+
+}
+.dropdownContent {
+  display: none; /* Ẩn nội dung theo mặc định */
+  position: absolute; /* Định vị tuyệt đối so với .dropdown */
+  z-index: 1;
+  left: 0; 
+  top: 100%; /* Đặt ngay dưới đáy của ảnh */
+  width: max-content;
+  height: max-content;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.dropdownContent a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block; /* Mỗi link chiếm một dòng riêng */
+}
+.dropdownContent a:hover {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+.dropdown:hover .dropdownContent {
+  display: block;
+}

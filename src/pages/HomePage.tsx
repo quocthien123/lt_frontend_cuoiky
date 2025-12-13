@@ -3,10 +3,9 @@ import NewCard from "../components/news/NewCard";
 
 export default function HomePage() {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
             {mockNews.map(news => (
-                <NewCard key = {news.id} {...news} />
+                <NewCard key={news.id} {...news} />
             ))}
         </div>
     )
