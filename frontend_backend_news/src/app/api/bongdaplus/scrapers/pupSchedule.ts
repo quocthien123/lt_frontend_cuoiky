@@ -3,7 +3,7 @@ import { json } from 'stream/consumers';
 import { UpcomingMatch } from '../types'
 // Giả định bạn đã có URL đầy đủ từ bước 1
 const JSON_URL = `https://data.bongdaplus.vn/data/top-list-matches.json?_=${Date.now()}`; 
-console.log(JSON_URL)
+//console.log(JSON_URL)
 export async function fetchUpcomingMatches() {
   try {
     const response = await axios.get(JSON_URL);
@@ -26,7 +26,7 @@ export async function fetchUpcomingMatches() {
     }));
     return matches
   } catch (error) {
-    console.error('Lỗi khi tải file JSON:', error);
+  //  console.error('Lỗi khi tải file JSON:', error);
   }
 }
 fetchUpcomingMatches();

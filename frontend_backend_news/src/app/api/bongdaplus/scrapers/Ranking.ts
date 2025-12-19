@@ -20,7 +20,7 @@ export async function fetchLeagueRanking() {
         leagueName = league.name
         const rawData = response.data;
         const dataMap = rawData.ranks
-        console.log(dataMap)
+//        console.log(dataMap)
         const standings = dataMap.map(item => ({
           nameTeam: item.team_name || '',
           teamLogo : `https://bongdaplus.vn${item.team_logo}` || '',

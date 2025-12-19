@@ -308,7 +308,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$nod
 ;
 // Giả định bạn đã có URL đầy đủ từ bước 1
 const JSON_URL = `https://data.bongdaplus.vn/data/top-list-matches.json?_=${Date.now()}`;
-console.log(JSON_URL);
 async function fetchUpcomingMatches() {
     try {
         const response = await __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].get(JSON_URL);
@@ -329,7 +328,7 @@ async function fetchUpcomingMatches() {
             }));
         return matches;
     } catch (error) {
-        console.error('Lỗi khi tải file JSON:', error);
+    //  console.error('Lỗi khi tải file JSON:', error);
     }
 }
 fetchUpcomingMatches();
@@ -428,7 +427,7 @@ async function fetchLeagueRanking() {
             leagueName = league.name;
             const rawData = response.data;
             const dataMap = rawData.ranks;
-            console.log(dataMap);
+            //        console.log(dataMap)
             const standings = dataMap.map((item)=>({
                     nameTeam: item.team_name || '',
                     teamLogo: `https://bongdaplus.vn${item.team_logo}` || '',
@@ -476,6 +475,13 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$src
 ;
 ;
 ;
+//dinh nghia cors
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Cache-Control': 's-maxage=600'
+};
 async function GET(request) {
     try {
         const res = await fetch('https://bongdaplus.vn', {
@@ -499,16 +505,17 @@ async function GET(request) {
                 standing
             }
         }, {
-            headers: {
-                'Cache-Control': 's-maxage=600'
-            }
+            status: 200,
+            headers: corsHeaders
         });
     } catch (error) {
+        console.log("lỗi header : ", error);
         return Response.json({
             success: false,
             error: error.message
         }, {
-            status: 500
+            status: 500,
+            headers: corsHeaders
         });
     }
 }
