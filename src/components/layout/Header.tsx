@@ -12,7 +12,10 @@ interface Article {
   title: string;
   child_Article: ChildArticle[];
 }
-
+const getSlug = (url: string) => {
+    if (!url) return "";
+    return url.replace('https://bongdaplus.vn/', '').replace(/\/$/, ''); 
+};
 
 export default function Header () {
     const  [ menu, setMenus ] = useState<Article[]>([])
@@ -32,7 +35,9 @@ export default function Header () {
                 <ul>
                     {menu.map(item => (
                         <li className={styles.link}>
-                            <a href={item.source_Link}>{item.title}</a>
+                            <Link to={`/danh-muc/${getSlug(item.source_Link)}`}>
+                                {item.title}
+                            </Link>
 
                             {item.child_Article && item .child_Article.length > 0 && (
                                 <ul className={styles.subMenu}> 
@@ -40,7 +45,9 @@ export default function Header () {
 
                                     <li key={childIndex}>
 
-                                        <a href={child.child_source_link}> {child.child_title}</a>
+                                        <Link to={`/danh-muc/${getSlug(child.child_source_link)}`}>
+                                            {child.child_title}
+                                        </Link>
                                     </li>
                                 ))}
                                 </ul>
