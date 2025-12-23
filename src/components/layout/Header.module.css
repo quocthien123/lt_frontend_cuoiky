@@ -7,12 +7,19 @@
     justify-content: space-between;
     max-width: 1200px;
 }
-.link {
-    text-decoration: none;
-    color: black;
-    font-size: large;
-    padding-left: 1rem;
-    font-weight: 500;
+.nav_bar {
+    display: flex;       
+    list-style: none;  
+    padding: 0;
+    gap: 20px;   
+
+  }
+.nav_bar li {
+    position: relative;
+    display: inline-block; 
+}
+ul li a {
+  text-decoration: none;
 }
 .logo {
   font-size: 1.5rem;
@@ -60,4 +67,29 @@
 }
 .dropdown:hover .dropdownContent {
   display: block;
+}
+.subMenu {
+  display: none;
+  position: absolute; /* Định vị tuyệt đối so với .dropdown */
+  z-index: 1;
+  left: 0; 
+  top: 100%; /* Đặt ngay dưới đáy của ảnh */
+  width: max-content;
+  height: max-content;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.subMenu a {
+  color: black;
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block; /* Mỗi link chiếm một dòng riêng */
+}
+.nav_bar li:hover .subMenu {
+  display: flex;       
+  flex-direction: column;
+  list-style: none;  
+  padding: 0;
+  gap: 20px;   
 }

@@ -32,19 +32,16 @@ export default function Header () {
                 <Link className={styles.logo} to="/">
                     Tinbong
                 </Link>
-                <ul>
+                <ul className={styles.nav_bar}>
                     {menu.map(item => (
-                        <li className={styles.link}>
-                            <Link to={`/danh-muc/${getSlug(item.source_Link)}`}>
+                        <li>
+                            <Link to={`/danh-muc/${getSlug(item.source_Link)}`} > 
                                 {item.title}
                             </Link>
-
                             {item.child_Article && item .child_Article.length > 0 && (
                                 <ul className={styles.subMenu}> 
                                 {item.child_Article.map((child, childIndex) => (
-
                                     <li key={childIndex}>
-
                                         <Link to={`/danh-muc/${getSlug(child.child_source_link)}`}>
                                             {child.child_title}
                                         </Link>
@@ -52,7 +49,6 @@ export default function Header () {
                                 ))}
                                 </ul>
                             )} 
-
                         </li>
 
                     ))

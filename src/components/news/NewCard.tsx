@@ -4,24 +4,24 @@ interface NewCardProps {
 
     title: string;
     category: string;
-    image: string;
+    imageUrl: string;
     time?: string;
 
-
+    link: string
 }
 
-export default function NewCard({title, category, image, time}: NewCardProps) {
+export default function NewCard({title, category, imageUrl, time,link}: NewCardProps) {
 
     return (
-        <div className="card">
-            <img src={image} alt={title}  />
+        <a className="card" href={link}>
+            <img src={imageUrl} alt={title}  />
 
             <div>
                 <span>{category}</span>
                 <h3 >{title}</h3>
                 {time && <p >{time}</p>}
             </div>
-        </div>
+        </a>
 
     );
 }
