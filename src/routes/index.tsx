@@ -6,5 +6,5 @@ import CategoryPage from "../pages/CategoryPage";
 const router = createBrowserRouter( [
 
     {path: "/", element: <App />},
-    {path: "/news/:slug", element: <CategoryPage/>}
+    {path: "/danh-muc/:slug", element: <CategoryPage/>}
 ])

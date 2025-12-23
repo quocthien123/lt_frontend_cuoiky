@@ -35,6 +35,12 @@ const mod = __turbopack_context__.x("next/dist/shared/lib/no-fallback-error.exte
 
 module.exports = mod;
 }),
+"[externals]/next/dist/server/app-render/after-task-async-storage.external.js [external] (next/dist/server/app-render/after-task-async-storage.external.js, cjs)", ((__turbopack_context__, module, exports) => {
+
+const mod = __turbopack_context__.x("next/dist/server/app-render/after-task-async-storage.external.js", () => require("next/dist/server/app-render/after-task-async-storage.external.js"));
+
+module.exports = mod;
+}),
 "[externals]/node:stream [external] (node:stream, cjs)", ((__turbopack_context__, module, exports) => {
 
 const mod = __turbopack_context__.x("node:stream", () => require("node:stream"));
@@ -185,40 +191,6 @@ const mod = __turbopack_context__.x("node:dns", () => require("node:dns"));
 
 module.exports = mod;
 }),
-"[project]/frontend_backend_news/src/app/api/bongdaplus/scrapers/news.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
-
-__turbopack_context__.s([
-    "scrapeNews",
-    ()=>scrapeNews
-]);
-function scrapeNews($) {
-    const newsList = [];
-    $('ul.lst li.news').each((i, el)=>{
-        const $item = $(el);
-        const $titleAnchor = $item.find('a.title');
-        // 2. Lấy link và tiêu đề
-        const title = $titleAnchor.text().trim();
-        const href = $titleAnchor.attr('href') ? $titleAnchor.attr('href').trim() : '';
-        // 3. Lấy ảnh (nếu có) từ thẻ .thumb
-        const imageUrl = $item.find('.thumb img').attr('src') || '';
-        // Kiểm tra nếu có tiêu đề và link thì mới đẩy vào kết quả
-        if (title && href) {
-            const parts = href.split('/').filter(Boolean);
-            const category = parts[0] || '';
-            const root = '/' + (parts[0] || '');
-            newsList.push({
-                title: title,
-                link: href,
-                imageUrl: imageUrl,
-                category: category,
-                root: root
-            });
-        }
-    });
-    return newsList;
-}
-}),
 "[externals]/util [external] (util, cjs)", ((__turbopack_context__, module, exports) => {
 
 const mod = __turbopack_context__.x("util", () => require("util"));
@@ -297,211 +269,74 @@ const mod = __turbopack_context__.x("events", () => require("events"));
 
 module.exports = mod;
 }),
-"[project]/frontend_backend_news/src/app/api/bongdaplus/scrapers/pupSchedule.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
+"[project]/frontend_backend_news/src/app/api/get-category/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-__turbopack_context__.s([
-    "fetchUpcomingMatches",
-    ()=>fetchUpcomingMatches
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/axios/lib/axios.js [app-route] (ecmascript)");
-;
-// Giả định bạn đã có URL đầy đủ từ bước 1
-const JSON_URL = `https://data.bongdaplus.vn/data/top-list-matches.json?_=${Date.now()}`;
-async function fetchUpcomingMatches() {
-    try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].get(JSON_URL);
-        // Dữ liệu trả về đã là một mảng các trận đấu
-        const rawData = response.data;
-        // console.log('rawdata:', JSON.stringify(rawData, null, 2));
-        const matches = rawData.map((item)=>({
-                link: `https://bongdaplus.vn${item.href || ''}`,
-                starttime: item.start_time || '',
-                homeTeam: {
-                    name: item.home_name || 'Unknown',
-                    logo: `https://bongdaplus.vn${item.home_logo}` || ''
-                },
-                awayTeam: {
-                    name: item.away_name || 'Unknown',
-                    logo: `https://bongdaplus.vn${item.away_logo}` || ''
-                }
-            }));
-        return matches;
-    } catch (error) {
-    //  console.error('Lỗi khi tải file JSON:', error);
-    }
-}
-fetchUpcomingMatches();
-}),
-"[project]/frontend_backend_news/src/app/api/bongdaplus/scrapers/Article.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
-
-__turbopack_context__.s([
-    "scrapeArticle",
-    ()=>scrapeArticle
-]);
-function scrapeArticle($) {
-    const articleList = [];
-    $('div.menu-side > ul.bar-w > li').each((i, el)=>{
-        const $item = $(el);
-        //    console.log(`Nội dung thô của li thứ ${i}:`, $(el).text().trim());
-        const $titleAnchor = $item.find('> a');
-        const category = $titleAnchor.text();
-        //    console.log(`Đang quét Menu Cha: ${category}`);
-        const href = $titleAnchor.attr('href') || '';
-        const subArticleList = [];
-        const $dropDown = $item.find('div.drop-down');
-        if ($dropDown.length > 0) {
-            const $subItems = $item.find('ul.lst li a');
-            //    console.log($subItems.text())
-            $subItems.each((subIdx, subEl)=>{
-                const $subAnchor = $(subEl);
-                const subTitle = $subAnchor.attr('title') || $subAnchor.text().trim();
-                const subHref = $subAnchor.attr('href') || '';
-                if (subTitle) {
-                    subArticleList.push({
-                        child_title: subTitle,
-                        child_source_link: `https://bongdaplus.vn${subHref}`
-                    });
-                }
-            });
-        }
-        if (category) {
-            articleList.push({
-                source_Link: `https://bongdaplus.vn${href}`,
-                title: category,
-                child_Article: subArticleList
-            });
-        }
-    });
-    return articleList;
-}
-}),
-"[project]/frontend_backend_news/src/app/api/bongdaplus/scrapers/Ranking.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
-
-__turbopack_context__.s([
-    "fetchLeagueRanking",
-    ()=>fetchLeagueRanking
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/axios/lib/axios.js [app-route] (ecmascript)");
-;
-const LEAGUES = [
-    {
-        id: 'premier-league',
-        name: 'Ngoại Hạng Anh',
-        url: `https://data.bongdaplus.vn/data/bong-da-anh-rankings.json?_=${Date.now()}`
-    },
-    {
-        id: 'la-liga',
-        name: 'Tây Ban Nha',
-        url: `https://data.bongdaplus.vn/data/bong-da-tay-ban-nha-rankings.json?_=${Date.now()}`
-    },
-    {
-        id: 'v-league',
-        name: 'V-League',
-        url: `https://data.bongdaplus.vn/data/bong-da-viet-nam-rankings.json?_=${Date.now()}`
-    },
-    {
-        id: 'bundesliga',
-        name: 'Đức',
-        url: `https://data.bongdaplus.vn/data/bong-da-duc-rankings.json?_=${Date.now()}`
-    },
-    {
-        id: 'league-1',
-        name: 'Pháp',
-        url: `https://data.bongdaplus.vn/data/bong-da-phap-rankings.json?_=${Date.now()}`
-    },
-    {
-        id: 'serie-A',
-        name: 'Ý',
-        url: `https://data.bongdaplus.vn/data/bong-da-y-rankings.json?_=${Date.now()}`
-    }
-];
-async function fetchLeagueRanking() {
-    let leagueName = '';
-    try {
-        // 2. Tạo danh sách các lời hứa (Promises)
-        const requests = LEAGUES.map(async (league)=>{
-            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].get(league.url);
-            leagueName = league.name;
-            const rawData = response.data;
-            const dataMap = rawData.ranks;
-            //        console.log(dataMap)
-            const standings = dataMap.map((item)=>({
-                    nameTeam: item.team_name || '',
-                    teamLogo: `https://bongdaplus.vn/${item.team_logo}` || '',
-                    rank: item.position || '',
-                    matches: item.matches || '',
-                    win: item.wins || '',
-                    losses: item.losses || '',
-                    draws: item.draws || '',
-                    ghiban: item.scores_for || '',
-                    thung_luoi: item.scores_against || '',
-                    hieu_so: item.scores_diff || '',
-                    point: item.points || ''
-                }));
-            return {
-                league_name: league.id,
-                league_nation: league.name,
-                standings: standings
-            };
-        });
-        const finalData = await Promise.all(requests);
-        return finalData;
-    } catch (error) {
-        console.error("Lỗi hệ thống:", error);
-        console.log("lỗi nằm ở league: ", leagueName);
-        return [];
-    }
-}
-}),
-"[project]/frontend_backend_news/src/app/api/bongdaplus/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
-
-// src/app/api/bongdaplus/route.ts
 __turbopack_context__.s([
     "GET",
-    ()=>GET
+    ()=>GET,
+    "OPTIONS",
+    ()=>OPTIONS,
+    "leagueRanking",
+    ()=>leagueRanking
 ]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/next/server.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/index.js [app-route] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$load$2d$parse$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/load-parse.js [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$src$2f$app$2f$api$2f$bongdaplus$2f$scrapers$2f$news$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/src/app/api/bongdaplus/scrapers/news.ts [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$src$2f$app$2f$api$2f$bongdaplus$2f$scrapers$2f$pupSchedule$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/src/app/api/bongdaplus/scrapers/pupSchedule.ts [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$src$2f$app$2f$api$2f$bongdaplus$2f$scrapers$2f$Article$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/src/app/api/bongdaplus/scrapers/Article.ts [app-route] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$src$2f$app$2f$api$2f$bongdaplus$2f$scrapers$2f$Ranking$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/src/app/api/bongdaplus/scrapers/Ranking.ts [app-route] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/axios/lib/axios.js [app-route] (ecmascript)");
 ;
 ;
 ;
-;
-;
-//dinh nghia cors
+// Headers để tránh lỗi CORS
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Cache-Control': 's-maxage=600'
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 };
 async function GET(request) {
     try {
-        const res = await fetch('https://bongdaplus.vn', {
+        const searchParams = request.nextUrl.searchParams;
+        const slug = searchParams.get('slug');
+        if (!slug) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                success: false,
+                message: 'Thiếu slug'
+            }, {
+                status: 400,
+                headers: corsHeaders
+            });
+        }
+        //https://bongdaplus.vn/bong-da-viet-nams
+        const urlToScrape = `https://bongdaplus.vn/${slug}`;
+        const rankingUrl = `https://data.bongdaplus.vn/data/${slug}-rankings.json?_=${Date.now()}`;
+        console.log(`Đang cào dữ liệu từ: ${urlToScrape}`);
+        const res = await fetch(urlToScrape, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (compatible; BongDaPlus Scraper)'
+                'User-Agent': 'Mozilla/5.0 (compatible; MyScraper)'
             }
         });
-        if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
-        const $ = __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$load$2d$parse$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["load"](await res.text());
-        // Lấy từng loại dữ liệu
-        const news = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$src$2f$app$2f$api$2f$bongdaplus$2f$scrapers$2f$news$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["scrapeNews"])($);
-        const upcomingMatches = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$src$2f$app$2f$api$2f$bongdaplus$2f$scrapers$2f$pupSchedule$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["fetchUpcomingMatches"])();
-        const article = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$src$2f$app$2f$api$2f$bongdaplus$2f$scrapers$2f$Article$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["scrapeArticle"])($);
-        const standing = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$src$2f$app$2f$api$2f$bongdaplus$2f$scrapers$2f$Ranking$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["fetchLeagueRanking"])();
-        return Response.json({
+        if (!res.ok) throw new Error('Không thể truy cập trang đích');
+        const html = await res.text();
+        const $ = __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$load$2d$parse$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["load"](html);
+        const articles_news = [];
+        const standing = await leagueRanking(rankingUrl);
+        $('.cat-news .news').each((i, el)=>{
+            const $el = $(el);
+            const title = $el.find('a.title').text();
+            const img_url = $el.find('.thumb img').attr('src') || '';
+            const dateTime = $el.find('.info span').text();
+            const url = $el.find('a.title').attr('href');
+            articles_news.push({
+                title,
+                img_url,
+                dateTime,
+                url
+            });
+        });
+        return __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
             data: {
-                article,
-                news,
-                upcomingMatches,
+                articles_news,
                 standing
             }
         }, {
@@ -510,7 +345,7 @@ async function GET(request) {
         });
     } catch (error) {
         console.log("lỗi header : ", error);
-        return Response.json({
+        return __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: false,
             error: error.message
         }, {
@@ -519,7 +354,33 @@ async function GET(request) {
         });
     }
 }
+async function leagueRanking(leagueUrl) {
+    const response = await __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].get(leagueUrl);
+    const rawData = response.data;
+    const dataMap = rawData.ranks;
+    const standings = dataMap.map((item)=>({
+            nameTeam: item.team_name,
+            teamLogo: `https://data.bongdaplus.vn/logo/${item.team_logo}`,
+            rank: item.position,
+            matches: item.matches,
+            win: item.wins,
+            losses: item.losses,
+            draws: item.draws,
+            ghiban: item.scores_for,
+            thung_luoi: item.scores_against,
+            hieu_so: item.scores_diff,
+            point: item.points
+        }));
+    return {
+        standings: standings
+    };
+}
+async function OPTIONS() {
+    return __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({}, {
+        headers: corsHeaders
+    });
+}
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__062b5343._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__c4db47b7._.js.map
