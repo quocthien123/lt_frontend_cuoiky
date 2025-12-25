@@ -6,7 +6,7 @@
 }
 .newsContainer {
     display: flex;
-    width: 80%; 
+    width: 100%; 
 }
 .newsLeft {
     width: 30%;
@@ -14,5 +14,8 @@
 .listNewsNoImage {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 40%;
+}
+.standingsdiv {
+    width: 30%;
 }

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Standings, { StandingsTable, type RankingItem } from './Standing/StandingPage';
 
 function CategoryPage() {
     const { slug } = useParams();
-
     const [news, setNews] = useState<any[]>([]);
-    const [rankings, setRankings] = useState<any[]>([]);
+    const [rankings, setRankings] = useState<RankingItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -16,7 +16,7 @@ function CategoryPage() {
             if (result.success) 
                 setNews(result.data.articles_news)
                 setRankings(result.data.standing.standings)
-                console.log("Dữ liệu nhận được:", result); 
+               // console.log("Dữ liệu nhận được:", result); 
         })
         
     .catch(err => console.log(err));
@@ -35,46 +35,7 @@ function CategoryPage() {
                     </div>
                 ))}
             </div>
-
-    
-                <table >
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th >Đội</th>
-                                        
-                                    
-                                        <th >Hiệu số</th>
-                                        <th >Thắng</th>
-                                        <th >Hòa</th>
-                                            <th >Thua</th>
-                                            <th >Điểm</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {rankings.map((team: any, index) => (
-                                        <tr key={index}>
-                                            {/* Tùy vào tên trường dữ liệu Backend trả về mà bạn sửa lại ở dưới nhé */}
-                                            {/* Ví dụ: team.rank, team.name, team.points */}
-                                            <td >{index + 1}</td>
-                                            <td>
-                                                <div style={{display: 'flex', alignItems: 'center', gap: '5px'}}>
-                                                    {<img src={team.teamLogo} width="20" />} 
-                                                    {team.nameTeam}
-                                                </div>
-
-                                            </td>
-                                            
-                                            <td >{team.hieu_so}</td>
-                                             <td >{team.win}</td>
-                                              <td >{team.draws}</td>
-                                               <td >{team.losses}</td>
-                                               <td ><strong>{team.point}</strong></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-             
+                <StandingsTable rankings={rankings} ></StandingsTable>
         </div>
     );
 }
