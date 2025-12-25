@@ -1,0 +1,112 @@
+import { NextRequest, NextResponse } from 'next/server';
+import * as cheerio from 'cheerio';
+import { Article } from '../bongdaplus/types';
+import axios from 'axios';
+
+// Headers để tránh lỗi CORS
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export interface Article_News {
+    title: string,
+    img_url: string,
+    dateTime : string,
+    url : string,
+}
+
+export async function GET(request: NextRequest) {
+    try {
+  const searchParams = request.nextUrl.searchParams;
+  const slug = searchParams.get('slug');
+  if (!slug) {
+    return NextResponse.json(
+      { success: false, message: 'Thiếu slug' },
+      { status: 400, headers: corsHeaders }
+    );
+  }
+        //https://bongdaplus.vn/bong-da-viet-nams
+  const urlToScrape = `https://bongdaplus.vn/${slug}`;
+  const rankingUrl = `https://data.bongdaplus.vn/data/${slug}-rankings.json?_=${Date.now()}`
+  console.log(`Đang cào dữ liệu từ: ${urlToScrape}`);
+const res = await fetch(urlToScrape, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MyScraper)' },
+    });
+
+    if (!res.ok) throw new Error('Không thể truy cập trang đích');
+  const html = await res.text();
+    const $ = cheerio.load(html);
+
+    const articles_news: Article_News[] = []
+      const standing = await leagueRanking(rankingUrl)
+    $('.cat-news .news').each((i, el) => {
+        
+        const $el = $(el)
+
+        const title = $el.find('a.title').text()
+
+        const img_url = $el.find('.thumb img').attr('src') || ''
+
+        const  dateTime = $el.find('.info span').text()
+
+        const url = $el.find('a.title').attr('href') 
+
+        articles_news.push({
+            title,
+            img_url,
+            dateTime,
+            url,
+        })
+    })
+      return NextResponse.json(
+      {
+        success: true,
+        data: {
+            articles_news,
+            standing
+        },
+      },
+      {status : 200,
+        headers : corsHeaders
+      }
+    );
+  } catch (error) {
+    console.log("lỗi header : ", error)
+    return NextResponse.json(
+      {
+        success: false,
+        error: (error as Error).message,
+      },
+      { status: 500, 
+        headers: corsHeaders
+      }
+    );
+  }
+}
+
+export async function leagueRanking(leagueUrl : string) {
+        const response = await axios.get(leagueUrl);
+        const rawData = response.data;
+        const dataMap = rawData.ranks
+        const standings = dataMap.map(item => ({
+          nameTeam: item.team_name ,
+          teamLogo : `https://data.bongdaplus.vn/logo/${item.team_logo}` ,
+          rank : item.position,
+          matches : item.matches ,
+          win: item.wins ,
+          losses : item.losses ,
+          draws: item.draws,
+          ghiban : item.scores_for ,
+          thung_luoi : item.scores_against ,
+          hieu_so : item.scores_diff ,
+          point : item.points ,
+    }));
+    return {
+        standings: standings
+      };
+};
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}

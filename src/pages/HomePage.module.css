@@ -1,0 +1,21 @@
+
+.gridNews {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+.newsContainer {
+    display: flex;
+    width: 100%; 
+}
+.newsLeft {
+    width: 30%;
+}
+.listNewsNoImage {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+.standingsdiv {
+    width: 30%;
+}

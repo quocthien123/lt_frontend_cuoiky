@@ -7,7 +7,6 @@ const JSON_URL = `https://data.bongdaplus.vn/data/top-list-matches.json?_=${Date
 export async function fetchUpcomingMatches() {
   try {
     const response = await axios.get(JSON_URL);
-    // Dữ liệu trả về đã là một mảng các trận đấu
     const rawData = response.data; 
    // console.log('rawdata:', JSON.stringify(rawData, null, 2));
     

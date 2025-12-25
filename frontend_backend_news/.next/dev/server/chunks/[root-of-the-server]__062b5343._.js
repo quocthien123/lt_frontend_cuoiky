@@ -197,23 +197,36 @@ function scrapeNews($) {
     $('ul.lst li.news').each((i, el)=>{
         const $item = $(el);
         const $titleAnchor = $item.find('a.title');
-        // 2. Lấy link và tiêu đề
         const title = $titleAnchor.text().trim();
         const href = $titleAnchor.attr('href') ? $titleAnchor.attr('href').trim() : '';
-        // 3. Lấy ảnh (nếu có) từ thẻ .thumb
         const imageUrl = $item.find('.thumb img').attr('src') || '';
-        // Kiểm tra nếu có tiêu đề và link thì mới đẩy vào kết quả
         if (title && href) {
-            const parts = href.split('/').filter(Boolean);
-            const category = parts[0] || '';
-            const root = '/' + (parts[0] || '');
-            newsList.push({
-                title: title,
-                link: href,
-                imageUrl: imageUrl,
-                category: category,
-                root: root
-            });
+            // 1. Tìm vị trí của tin tức có tiêu đề trùng lặp trong danh sách hiện tại
+            const existingIndex = newsList.findIndex((news)=>news.title === title);
+            if (existingIndex > -1) {
+                // 2. Nếu ĐÃ TRÙNG: Kiểm tra nếu cái mới có ảnh, thì thay thế cái cũ
+                if (imageUrl) {
+                    const parts = href.split('/').filter(Boolean);
+                    newsList[existingIndex] = {
+                        title: title,
+                        link: href,
+                        imageUrl: imageUrl,
+                        category: parts[0] || '',
+                        root: '/' + (parts[0] || '')
+                    };
+                }
+            // Nếu cái mới không có ảnh, ta giữ nguyên cái cũ (không làm gì cả)
+            } else {
+                // 3. Nếu CHƯA TRÙNG: Thêm mới bình thường
+                const parts = href.split('/').filter(Boolean);
+                newsList.push({
+                    title: title,
+                    link: href,
+                    imageUrl: imageUrl,
+                    category: parts[0] || '',
+                    root: '/' + (parts[0] || '')
+                });
+            }
         }
     });
     return newsList;
@@ -311,7 +324,6 @@ const JSON_URL = `https://data.bongdaplus.vn/data/top-list-matches.json?_=${Date
 async function fetchUpcomingMatches() {
     try {
         const response = await __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].get(JSON_URL);
-        // Dữ liệu trả về đã là một mảng các trận đấu
         const rawData = response.data;
         // console.log('rawdata:', JSON.stringify(rawData, null, 2));
         const matches = rawData.map((item)=>({
@@ -429,17 +441,17 @@ async function fetchLeagueRanking() {
             const dataMap = rawData.ranks;
             //        console.log(dataMap)
             const standings = dataMap.map((item)=>({
-                    nameTeam: item.team_name || '',
-                    teamLogo: `https://bongdaplus.vn${item.team_logo}` || '',
-                    rank: item.position || '',
-                    matches: item.matches || '',
-                    win: item.wins || '',
-                    losses: item.losses || '',
-                    draws: item.draws || '',
-                    ghiban: item.scores_for || '',
-                    thung_luoi: item.scores_against || '',
-                    hieu_so: item.scores_diff || '',
-                    point: item.point || ''
+                    nameTeam: item.team_name,
+                    teamLogo: `https://data.bongdaplus.vn/logo/${item.team_logo}` || '',
+                    rank: item.position,
+                    matches: item.matches,
+                    win: item.wins,
+                    losses: item.losses,
+                    draws: item.draws,
+                    ghiban: item.scores_for,
+                    thung_luoi: item.scores_against,
+                    hieu_so: item.scores_diff,
+                    point: item.points
                 }));
             return {
                 league_name: league.id,

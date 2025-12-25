@@ -22,17 +22,17 @@ export async function fetchLeagueRanking() {
         const dataMap = rawData.ranks
 //        console.log(dataMap)
         const standings = dataMap.map(item => ({
-          nameTeam: item.team_name || '',
-          teamLogo : `https://bongdaplus.vn${item.team_logo}` || '',
-          rank : item.position || '',
-          matches : item.matches || '',
-          win: item.wins || '',
-          losses : item.losses || '',
-          draws: item.draws || '',
-          ghiban : item.scores_for || '',
-          thung_luoi : item.scores_against || '',
-          hieu_so : item.scores_diff || '',
-          point : item.point || '',
+          nameTeam: item.team_name ,
+          teamLogo : `https://data.bongdaplus.vn/logo/${item.team_logo}` || '',
+          rank : item.position ,
+          matches : item.matches ,
+          win: item.wins ,
+          losses : item.losses ,
+          draws: item.draws ,
+          ghiban : item.scores_for ,
+          thung_luoi : item.scores_against ,
+          hieu_so : item.scores_diff ,
+          point : item.points ,
 
     }));
     return {
