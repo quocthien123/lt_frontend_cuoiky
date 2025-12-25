@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { json } from 'stream/consumers';
-import { UpcomingMatch } from '../types'
+// import { json } from 'stream/consumers';
+// import { UpcomingMatch } from '../types'
 // Giả định bạn đã có URL đầy đủ từ bước 1
 const JSON_URL = `https://data.bongdaplus.vn/data/top-list-matches.json?_=${Date.now()}`; 
 //console.log(JSON_URL)
