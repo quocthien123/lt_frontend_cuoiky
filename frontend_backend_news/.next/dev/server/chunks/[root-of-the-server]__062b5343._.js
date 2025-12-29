@@ -327,15 +327,17 @@ async function fetchUpcomingMatches() {
         const rawData = response.data;
         // console.log('rawdata:', JSON.stringify(rawData, null, 2));
         const matches = rawData.map((item)=>({
-                link: `https://bongdaplus.vn${item.href || ''}`,
-                starttime: item.start_time || '',
+                leagueLogo: item.tournament.tournament_logo,
+                leagueId: item.tournament.tournament_id,
+                link: `https://bongdaplus.vn/truc-tiep-mfiws1aoh0uztg4/manchester-united-vs-newcastle-united-7kbz8ilusx8or9b.html`,
+                starttime: item.start_time,
                 homeTeam: {
-                    name: item.home_name || 'Unknown',
-                    logo: `https://bongdaplus.vn${item.home_logo}` || ''
+                    name: item.home_name,
+                    logo: `https://data.bongdaplus.vn/logo/${item.home_logo}`
                 },
                 awayTeam: {
-                    name: item.away_name || 'Unknown',
-                    logo: `https://bongdaplus.vn${item.away_logo}` || ''
+                    name: item.away_name,
+                    logo: `https://data.bongdaplus.vn/logo/${item.away_logo}`
                 }
             }));
         return matches;

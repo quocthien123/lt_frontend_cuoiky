@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './NoImageNews.module.css'
 
 interface NoImageCardProps {
@@ -7,12 +8,11 @@ interface NoImageCardProps {
     link: string;
 }
 export default function NoImageNewsCard({title, category, time, link}: NoImageCardProps) {
-
     return (
-        <a className={styles.no_image_card} href={link}>
+        <Link className={styles.no_image_card} to={link.slice(1)}>
             <span>{category}</span>
             <h3 >{title}</h3>
             {time && <p>{time}</p>}
-        </a>
+        </Link>
     );
 }

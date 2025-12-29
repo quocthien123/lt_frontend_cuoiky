@@ -25,6 +25,7 @@ export async function fetchLeaguesMatches() {
         const matches = dataMap.map(item => ({
             round_name: item.round_name,
             home_name: item.home_name,
+            //https://data.bongdaplus.vn/logo/team-o014smco78js6pk.png
             home_logo : `https://data.bongdaplus.vn/logo/${item.home_logo}`,
             away_name: item.away_name,
             away_logo : `https://data.bongdaplus.vn/logo/${item.away_logo}`,

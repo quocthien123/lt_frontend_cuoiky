@@ -4,11 +4,16 @@ import { useEffect, useState } from 'react';
 import  styles from './HomePage.module.css'
 import NoImageNewsCard from "../components/news/NoImageNews";
 import Standings, { type RankingGroup } from "./Standing/StandingPage";
+import UpcomingMatchesLayout from "./Matches/UpcomingMatches";
+import { useParams } from "react-router-dom";
 export default function HomePage() {
-
+   
     const [news, setNews] = useState<any[]>([]);
     const [standings, setStandings] = useState<RankingGroup[]>([]);
      const [loading, setLoading] = useState(true); //loading de load Rankinggroup
+     const [upcomingMatches, setUpcomingMatches] = useState<any[]>([]);
+
+
     useEffect(() => {
         setLoading(true); 
         fetch(`http://localhost:3000/api/bongdaplus`)
@@ -17,23 +22,32 @@ export default function HomePage() {
             if (result.success) 
                 setNews(result.data.news)
                 setStandings(result.data.standing)
+                setUpcomingMatches(result.data.upcomingMatches)
                 console.log("Dữ liệu nhận được:", result);
             setLoading(false);  
         }
+        
     )
         
     .catch(err => console.log(err));
-    } , []);
+    } ,[]);
         const firstNewsWithImage = news.find(item => item.imageUrl && item.imageUrl !== "");
     
     return (
         <div>
+            <div>
+                <UpcomingMatchesLayout matches = {upcomingMatches}/>
+                 </div>
+                 <div style={ {height: "50px" }}> </div>
             <div className={styles.newsContainer}>
+                
                 <div className={styles.newsLeft}>
+                        <h2> Tin mới </h2>
                       {firstNewsWithImage && <NewCard {...firstNewsWithImage}/>}
                 </div>
             
                 <ul className={styles.listNewsNoImage}>
+                    <h2>Tin vắn</h2>
                     {news
                         .filter(item => item.imageUrl == "")
                         .slice(1, 7)
@@ -42,7 +56,10 @@ export default function HomePage() {
                         ))}
 
                 </ul>
-                    <div className={styles.standings}>
+
+
+                    <div className={styles.standingsdiv}>
+                           <h2> Bảng xếp hạng </h2>
                     {standings.length > 0 ? (
                         <Standings rankings={standings} />
                     ) : (
@@ -50,16 +67,25 @@ export default function HomePage() {
                     )}
                     </div>
             </div>
-             <h2> Tin bóng đá </h2>
-            <div className={styles.gridNews}>
-           
-            {news
-            .filter(item => item.imageUrl && item.imageUrl !== "")
-            .slice(1, 17)
-            .map(news => (
-                <NewCard key={news.id} {...news} />
-            ))}
-        </div>
+            <div >
+
+                    <h2>Lịch thi đấu </h2>
+
+            </div>
+            <div>
+            <h2> Tin bóng đá </h2>
+                        <div className={styles.gridNews}>
+                    
+                        {news
+                        .filter(item => item.imageUrl && item.imageUrl !== "")
+                        .slice(1, 17)
+                        .map(news => (
+                            <NewCard key={news.id} {...news} />
+                        ))}
+                    </div>
+
+            </div>
+          
         </div>
      
     )

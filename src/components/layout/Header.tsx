@@ -58,7 +58,7 @@ export default function Header () {
                 </ul>
               <div className={styles.dropdown}>
                
-                      <img src="public\user.svg" alt="User Avatar" className= {styles.avatarrounded}></img>
+                      <img src="/user.svg" alt="User Avatar" className= {styles.avatarrounded}></img>
                
                     <div className={styles.dropdownContent}>
                         <a href="#">Đăng nhập</a>
