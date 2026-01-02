@@ -6,6 +6,8 @@ import NoImageNewsCard from "../components/news/NoImageNews";
 import Standings, { type RankingGroup } from "./Standing/StandingPage";
 import UpcomingMatchesLayout from "./Matches/UpcomingMatches";
 import { useParams } from "react-router-dom";
+import type { LeagueGroup } from "./Matches/LichThiDauPage";
+import Schedule from "./Matches/LichThiDauPage";
 export default function HomePage() {
    
     const [news, setNews] = useState<any[]>([]);
@@ -13,7 +15,7 @@ export default function HomePage() {
      const [loading, setLoading] = useState(true); //loading de load Rankinggroup
      const [upcomingMatches, setUpcomingMatches] = useState<any[]>([]);
 
-
+    const [leagues, setLeagues] = useState<LeagueGroup[]>([]);
     useEffect(() => {
         setLoading(true); 
         fetch(`http://localhost:3000/api/bongdaplus`)
@@ -26,11 +28,29 @@ export default function HomePage() {
                 console.log("Dữ liệu nhận được:", result);
             setLoading(false);  
         }
+    )
+        
+    .catch(err => console.log(err));
+    } ,[]);
+
+    
+    useEffect(() => {
+        setLoading(true); 
+        fetch(`http://localhost:3000/api/lichthidau`)
+        .then(res => res.json())
+        .then(result => {
+            if (result.success) 
+                setLeagues(result.data.matches)
+                
+              console.log("Dữ liệu nhận được:", result);
+            setLoading(false);  
+        }
         
     )
         
     .catch(err => console.log(err));
     } ,[]);
+
         const firstNewsWithImage = news.find(item => item.imageUrl && item.imageUrl !== "");
     
     return (
@@ -70,7 +90,9 @@ export default function HomePage() {
             <div >
 
                     <h2>Lịch thi đấu </h2>
-
+                    <div>
+                        <Schedule leagues = {leagues} />
+                    </div>
             </div>
             <div>
             <h2> Tin bóng đá </h2>

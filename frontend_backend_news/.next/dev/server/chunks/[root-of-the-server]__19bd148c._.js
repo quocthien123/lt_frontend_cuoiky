@@ -165,38 +165,75 @@ const LEAGUES = [
         url: `https://data.bongdaplus.vn/data/champions-league-cup-c1-matches.json?_=${Date.now()}`
     }
 ];
-async function fetchLeaguesMatches() {
-    let leagueName = '';
+function getDateString(timestamp) {
     try {
-        // 2. Tạo danh sách các lời hứa (Promises)
+        return timestamp.split(' ')[0];
+    } catch  {
+        return "unknown";
+    }
+}
+function groupBy(array, keyFn) {
+    const result = {};
+    for (const item of array){
+        const key = keyFn(item);
+        if (!result[key]) {
+            result[key] = [];
+        }
+        result[key].push(item);
+    }
+    return result;
+}
+async function fetchLeaguesMatches() {
+    try {
         const requests = LEAGUES.map(async (league)=>{
-            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].get(league.url);
-            leagueName = league.name;
-            const rawData = response.data;
-            const dataMap = rawData.matches;
-            //        console.log(dataMap)
-            const matches = dataMap.map((item)=>({
-                    round_name: item.round_name,
-                    home_name: item.home_name,
-                    home_logo: `https://data.bongdaplus.vn/logo/${item.home_logo}`,
-                    away_name: item.away_name,
-                    away_logo: `https://data.bongdaplus.vn/logo/${item.away_logo}`,
-                    start_time: item.start_time,
-                    goals_home: item.goals_home,
-                    goals_away: item.goals_away,
-                    status: item.status
-                }));
-            return {
-                league_name: league.id,
-                league_nation: league.name,
-                matches: matches
-            };
+            try {
+                const response = await __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].get(league.url);
+                const rawData = response.data;
+                const matches = rawData.matches.map((item)=>({
+                        round_name: item.round_name,
+                        home_name: item.home_name,
+                        home_logo: `https://data.bongdaplus.vn/logo/${item.home_logo}`,
+                        away_name: item.away_name,
+                        away_logo: `https://data.bongdaplus.vn/logo/${item.away_logo}`,
+                        start_time: item.start_time,
+                        goals_home: item.goals_home,
+                        goals_away: item.goals_away,
+                        status: item.status
+                    }));
+                console.log(matches);
+                // --- Bắt đầu nhóm dữ liệu ---
+                // 1. Nhóm theo round_name
+                const roundsMap = groupBy(matches, (m)=>m.round_name);
+                // 2. Với mỗi vòng, nhóm tiếp theo ngày
+                const rounds = Object.entries(roundsMap).map(([roundName, roundMatches])=>{
+                    const datesMap = groupBy(roundMatches, (m)=>getDateString(m.start_time));
+                    const dates = Object.entries(datesMap).map(([date, matchesInDate])=>({
+                            date,
+                            matches: matchesInDate
+                        }));
+                    return {
+                        round_name: roundName,
+                        dates
+                    };
+                });
+                return {
+                    league_id: league.id,
+                    league_name: league.name,
+                    rounds
+                };
+            } catch (err) {
+                console.warn(`Lỗi khi fetch giải: ${league.name}`, err);
+                return {
+                    league_id: league.id,
+                    league_name: league.name,
+                    rounds: []
+                };
+            }
         });
         const finalData = await Promise.all(requests);
         return finalData;
     } catch (error) {
-        console.error("Lỗi hệ thống:", error);
-        console.log("lỗi nằm ở league: ", leagueName);
+        console.error("Lỗi hệ thống tổng thể:", error);
         return [];
     }
 }
