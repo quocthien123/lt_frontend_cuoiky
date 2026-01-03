@@ -36,6 +36,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/api/get-new-description/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/get-new-description">> = Specific
+  const handler = {} as typeof import("../../../src/app/api/get-new-description/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/api/lichthidau/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/lichthidau">> = Specific

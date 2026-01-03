@@ -1,0 +1,22 @@
+
+.nav_layout {
+    background-color: #ccc;
+    display: flex;
+    flex-direction: row;
+     justify-content: space-around;
+     align-items: center;
+}
+.cell {
+    align-items: center;
+    gap: 2px;
+    font-size: 14px;
+    color: black;
+    font-weight:  normal;
+    line-height:  inherit;
+}
+h4 {
+    font-size: 12px;
+    color: gray;
+    font-weight:  normal;
+    line-height:  inherit;
+}

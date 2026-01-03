@@ -8,8 +8,8 @@ a {
 }
 button {
     border-radius: 8px;
-    width: 8em; /*gap 8 lan co chu hien tai cua button */
-    height: 2rem; /* rong gap 2 lan co chu goc cua trang */
+    width: 6rem; 
+    height: 2rem; 
     font-weight: 500;
     font-size: medium;
     color: white;

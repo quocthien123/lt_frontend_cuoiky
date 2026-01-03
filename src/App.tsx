@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import HomePage from './pages/HomePage';
 import CategoryPage from './pages/CategoryPage';
-
+import NewPage from './pages/News/NewsPage'
 export default function App() {
   return (
     <Router>
@@ -21,7 +21,11 @@ export default function App() {
           element={
             <CategoryPage/>
           }
+
+          
         />
+        <Route path="/:category/:slug" element={<NewPage />} />
+        
         {/* Additional routes: /matches, /news, /standings... will be added later */}
       </Routes>
     </Router>

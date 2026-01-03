@@ -58,7 +58,7 @@ export default function Standings({ rankings }: { rankings: RankingGroup[] }) {
     const [selected, setSelected] = useState(0);
     return (
         <div>
-            <div style={{display: 'flex', gap: '8px', marginBottom: '12px'}}>
+            <div style={{display: 'flex', gap: '2px', marginBottom: '12px'}}>
                 {rankings.map((g, i) => (
                     <button key={i} onClick={() => setSelected(i)} className={i === selected ? styles.activeBtn : ''}>
                         {g.league_nation}
