@@ -26,7 +26,6 @@ const __TURBOPACK__default__export__ = new Uint16Array(// prettier-ignore
 "[project]/frontend_backend_news/node_modules/dom-serializer/node_modules/entities/lib/esm/decode_codepoint.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-// Adapted from https://github.com/mathiasbynens/he/blob/36afe179392226cf1b6ccdb16ebbb7a5a844d93a/src/he.js#L106-L134
 __turbopack_context__.s([
     "default",
     ()=>decodeCodePoint,
@@ -35,6 +34,7 @@ __turbopack_context__.s([
     "replaceCodePoint",
     ()=>replaceCodePoint
 ]);
+// Adapted from https://github.com/mathiasbynens/he/blob/36afe179392226cf1b6ccdb16ebbb7a5a844d93a/src/he.js#L106-L134
 var _a;
 const decodeMap = new Map([
     [
@@ -614,11 +614,11 @@ function decodeXML(str) {
 "[project]/frontend_backend_news/node_modules/dom-serializer/node_modules/entities/lib/esm/generated/encode-html.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-// Generated using scripts/write-encode-map.ts
 __turbopack_context__.s([
     "default",
     ()=>__TURBOPACK__default__export__
 ]);
+// Generated using scripts/write-encode-map.ts
 function restoreDiff(arr) {
     for(let i = 1; i < arr.length; i++){
         arr[i][0] += arr[i - 1][0] + 1;
@@ -6984,7 +6984,6 @@ const xmlDecodeTree = /* #__PURE__ */ new Uint16Array(// prettier-ignore
 "[project]/frontend_backend_news/node_modules/htmlparser2/node_modules/entities/dist/esm/decode-codepoint.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-// Adapted from https://github.com/mathiasbynens/he/blob/36afe179392226cf1b6ccdb16ebbb7a5a844d93a/src/he.js#L106-L134
 __turbopack_context__.s([
     "decodeCodePoint",
     ()=>decodeCodePoint,
@@ -6993,6 +6992,7 @@ __turbopack_context__.s([
     "replaceCodePoint",
     ()=>replaceCodePoint
 ]);
+// Adapted from https://github.com/mathiasbynens/he/blob/36afe179392226cf1b6ccdb16ebbb7a5a844d93a/src/he.js#L106-L134
 var _a;
 const decodeMap = new Map([
     [
@@ -7596,7 +7596,6 @@ const xmlDecodeTree = /* #__PURE__ */ new Uint16Array(// prettier-ignore
 "[project]/frontend_backend_news/node_modules/parse5/node_modules/entities/dist/esm/decode-codepoint.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-// Adapted from https://github.com/mathiasbynens/he/blob/36afe179392226cf1b6ccdb16ebbb7a5a844d93a/src/he.js#L106-L134
 __turbopack_context__.s([
     "decodeCodePoint",
     ()=>decodeCodePoint,
@@ -7605,6 +7604,7 @@ __turbopack_context__.s([
     "replaceCodePoint",
     ()=>replaceCodePoint
 ]);
+// Adapted from https://github.com/mathiasbynens/he/blob/36afe179392226cf1b6ccdb16ebbb7a5a844d93a/src/he.js#L106-L134
 var _a;
 const decodeMap = new Map([
     [

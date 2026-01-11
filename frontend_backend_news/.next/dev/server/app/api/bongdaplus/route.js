@@ -1,5 +1,5 @@
 var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/api/bongdaplus/route.js")
-R.c("server/chunks/8ed56_next_dist_1c27d141._.js")
+R.c("server/chunks/8ed56_next_dist_2680a991._.js")
 R.c("server/chunks/8ed56_cheerio_dist_esm_f70a84e6._.js")
 R.c("server/chunks/8ed56_60b7e83a._.js")
 R.c("server/chunks/8ed56_parse5_dist_e1056390._.js")

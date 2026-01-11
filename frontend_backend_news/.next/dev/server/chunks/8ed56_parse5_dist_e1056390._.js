@@ -4685,13 +4685,13 @@ class OpenElementStack {
 "[project]/frontend_backend_news/node_modules/parse5/dist/parser/formatting-element-list.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-//Const
 __turbopack_context__.s([
     "EntryType",
     ()=>EntryType,
     "FormattingElementList",
     ()=>FormattingElementList
 ]);
+//Const
 const NOAH_ARK_CAPACITY = 3;
 var EntryType;
 (function(EntryType) {

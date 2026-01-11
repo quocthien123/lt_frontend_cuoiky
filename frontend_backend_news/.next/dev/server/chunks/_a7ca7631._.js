@@ -629,15 +629,15 @@ const attributeNames = new Map([
 "[project]/frontend_backend_news/node_modules/dom-serializer/lib/esm/index.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-/*
- * Module dependencies
- */ __turbopack_context__.s([
+__turbopack_context__.s([
     "default",
     ()=>__TURBOPACK__default__export__,
     "render",
     ()=>render
 ]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domelementtype$2f$lib$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domelementtype/lib/esm/index.js [app-route] (ecmascript)");
+/*
+ * Module dependencies
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domelementtype$2f$lib$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domelementtype/lib/esm/index.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$dom$2d$serializer$2f$node_modules$2f$entities$2f$lib$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/dom-serializer/node_modules/entities/lib/esm/index.js [app-route] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$dom$2d$serializer$2f$node_modules$2f$entities$2f$lib$2f$esm$2f$escape$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/dom-serializer/node_modules/entities/lib/esm/escape.js [app-route] (ecmascript)");
 /**
@@ -4663,12 +4663,12 @@ const __TURBOPACK__default__export__ = selectAll;
 "[project]/frontend_backend_news/node_modules/nth-check/lib/esm/parse.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-// Following http://www.w3.org/TR/css3-selectors/#nth-child-pseudo
-// Whitespace as per https://www.w3.org/TR/selectors-3/#lex is " \t\r\n\f"
 __turbopack_context__.s([
     "parse",
     ()=>parse
 ]);
+// Following http://www.w3.org/TR/css3-selectors/#nth-child-pseudo
+// Whitespace as per https://www.w3.org/TR/selectors-3/#lex is " \t\r\n\f"
 const whitespace = new Set([
     9,
     10,

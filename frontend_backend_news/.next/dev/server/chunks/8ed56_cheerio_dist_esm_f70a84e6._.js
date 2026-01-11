@@ -237,11 +237,7 @@ function isHtml(str) {
 "[project]/frontend_backend_news/node_modules/cheerio/dist/esm/api/attributes.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-/**
- * Methods for getting and modifying attributes.
- *
- * @module cheerio/attributes
- */ __turbopack_context__.s([
+__turbopack_context__.s([
     "addClass",
     ()=>addClass,
     "attr",
@@ -269,7 +265,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$nod
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domutils$2f$lib$2f$esm$2f$stringify$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domutils/lib/esm/stringify.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$htmlparser2$2f$dist$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/htmlparser2/dist/esm/index.js [app-route] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domelementtype$2f$lib$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ElementType$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domelementtype/lib/esm/index.js [app-route] (ecmascript) <export * as ElementType>");
-var _a;
+/**
+ * Methods for getting and modifying attributes.
+ *
+ * @module cheerio/attributes
+ */ var _a;
 ;
 ;
 ;
@@ -749,11 +749,7 @@ function toggleClass(value, stateVal) {
 "[project]/frontend_backend_news/node_modules/cheerio/dist/esm/api/traversing.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-/**
- * Methods for traversing the DOM structure.
- *
- * @module cheerio/traversing
- */ __turbopack_context__.s([
+__turbopack_context__.s([
     "_findBySelector",
     ()=>_findBySelector,
     "add",
@@ -819,7 +815,11 @@ function toggleClass(value, stateVal) {
     "toArray",
     ()=>toArray
 ]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domhandler$2f$lib$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domhandler/lib/esm/index.js [app-route] (ecmascript) <locals>");
+/**
+ * Methods for traversing the DOM structure.
+ *
+ * @module cheerio/traversing
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domhandler$2f$lib$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domhandler/lib/esm/index.js [app-route] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domhandler$2f$lib$2f$esm$2f$node$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domhandler/lib/esm/node.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2d$select$2f$lib$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio-select/lib/esm/index.js [app-route] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$utils$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/utils.js [app-route] (ecmascript)");
@@ -1191,11 +1191,7 @@ function update(newChilds, parent) {
 "[project]/frontend_backend_news/node_modules/cheerio/dist/esm/api/manipulation.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-/**
- * Methods for modifying the DOM structure.
- *
- * @module cheerio/manipulation
- */ __turbopack_context__.s([
+__turbopack_context__.s([
     "_makeDomArray",
     ()=>_makeDomArray,
     "after",
@@ -1237,7 +1233,11 @@ function update(newChilds, parent) {
     "wrapInner",
     ()=>wrapInner
 ]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domhandler$2f$lib$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domhandler/lib/esm/index.js [app-route] (ecmascript) <locals>");
+/**
+ * Methods for modifying the DOM structure.
+ *
+ * @module cheerio/manipulation
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domhandler$2f$lib$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domhandler/lib/esm/index.js [app-route] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$domhandler$2f$lib$2f$esm$2f$node$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/domhandler/lib/esm/node.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$parse$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/parse.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$static$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/static.js [app-route] (ecmascript)");
@@ -2052,10 +2052,7 @@ const load = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backen
 "[project]/frontend_backend_news/node_modules/cheerio/dist/esm/index.js [app-route] (ecmascript) <locals>", ((__turbopack_context__) => {
 "use strict";
 
-/**
- * @file Batteries-included version of Cheerio. This module includes several
- *   convenience methods for loading documents from various sources.
- */ __turbopack_context__.s([
+__turbopack_context__.s([
     "decodeStream",
     ()=>decodeStream,
     "fromURL",
@@ -2065,7 +2062,10 @@ const load = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backen
     "stringStream",
     ()=>stringStream
 ]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$load$2d$parse$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/load-parse.js [app-route] (ecmascript)");
+/**
+ * @file Batteries-included version of Cheerio. This module includes several
+ *   convenience methods for loading documents from various sources.
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$load$2d$parse$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/load-parse.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$static$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/static.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$parse5$2d$htmlparser2$2d$tree$2d$adapter$2f$dist$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/parse5-htmlparser2-tree-adapter/dist/index.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$htmlparser2$2f$dist$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/htmlparser2/dist/esm/index.js [app-route] (ecmascript) <locals>");

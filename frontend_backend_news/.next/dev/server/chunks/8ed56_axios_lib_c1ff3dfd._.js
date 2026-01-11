@@ -2412,16 +2412,16 @@ const __TURBOPACK__default__export__ = speedometer;
 "[project]/frontend_backend_news/node_modules/axios/lib/helpers/throttle.js [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
+__turbopack_context__.s([
+    "default",
+    ()=>__TURBOPACK__default__export__
+]);
 /**
  * Throttle decorator
  * @param {Function} fn
  * @param {Number} freq
  * @return {Function}
- */ __turbopack_context__.s([
-    "default",
-    ()=>__TURBOPACK__default__export__
-]);
-function throttle(fn, freq) {
+ */ function throttle(fn, freq) {
     let timestamp = 0;
     let threshold = 1000 / freq;
     let lastArgs;
