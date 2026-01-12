@@ -33,24 +33,20 @@ export interface LeagueGroup {
 function findCurrentRoundIndex(rounds: RoundGroup[]): number {
   for (let i = 0; i < rounds.length; i++) {
     const round = rounds[i];
-    // Kiểm tra xem vòng này có trận nào CHƯA KẾT THÚC không
     const hasUpcomingOrLiveMatch = round.dates.some(dateGroup =>
       dateGroup.matches.some(match => {
         return  match.status != '100';
       })
     );
-
     if (hasUpcomingOrLiveMatch) {
-      return i; // Đây là vòng hiện tại
+      return i; 
     }
   }
 
-  // Nếu tất cả trận đã đá → trả về vòng cuối cùng (hoặc 0 nếu không có)
   return Math.max(0, rounds.length - 1);
 }
 
 
-// === Hiển thị 1 trận đấu ===
 function MatchRow({ match }: { match: Match }) {
   const isFinished = match.status == '100';
   return (
@@ -87,7 +83,6 @@ function MatchRow({ match }: { match: Match }) {
   );
 }
 
-// === Hiển thị lịch thi đấu theo giải ===
 export default function Schedule({ leagues }: { leagues: LeagueGroup[] }) {
   const [selectedLeagueIndex, setSelectedLeagueIndex] = useState(0);
 
@@ -98,13 +93,12 @@ export default function Schedule({ leagues }: { leagues: LeagueGroup[] }) {
   const selectedLeague = leagues[selectedLeagueIndex];
   if (!selectedLeague) return null;
 
-  // 👇 Lọc 4 vòng từ vòng hiện tại
+
   const currentRoundIndex = findCurrentRoundIndex(selectedLeague.rounds);
   const roundsToShow = selectedLeague.rounds.slice(currentRoundIndex, currentRoundIndex + 4);
 
   return (
     <div className={styles.container}>
-      {/* Chọn giải */}
       <div className={styles.leagueTabs}>
         {leagues.map((league, i) => (
           <button
@@ -117,7 +111,6 @@ export default function Schedule({ leagues }: { leagues: LeagueGroup[] }) {
         ))}
       </div>
 
-      {/* Hiển thị 4 vòng gần nhất */}
       <div className={styles.schedule}>
         {roundsToShow.map((round) => (
           <div key={round.round_name} className={styles.round}>

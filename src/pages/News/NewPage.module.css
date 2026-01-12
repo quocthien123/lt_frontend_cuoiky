@@ -1,0 +1,22 @@
+.title { 
+    text-align: center;
+    margin-top: 20px;
+    color: var(--heading-color);
+}
+.speak_news { display: flex; justify-content: center; margin: 1rem 0 }
+
+.news_article { max-width: 800px; margin: 0 auto; padding: 1rem; color: var(--text-color); }
+.summary { margin-bottom: 1.5rem; color: var(--text-color); }
+.lines { line-height: 1.6; margin-bottom: 1rem; color: var(--text-color); }
+.images { text-align: center; margin: 1.5rem 0 }
+.minhhoa { max-width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--border-color); }
+.caption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    font-style: italic;
+    margin-top: -0.5rem;
+    margin-bottom: 1.5rem;
+    }
+.related_articles { margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem }

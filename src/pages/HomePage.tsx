@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import type { LeagueGroup } from "./Matches/LichThiDauPage";
 import Schedule from "./Matches/LichThiDauPage";
 export default function HomePage() {
-   
+    const [theme, setTheme] = useState('light');
     const [news, setNews] = useState<any[]>([]);
     const [standings, setStandings] = useState<RankingGroup[]>([]);
      const [loading, setLoading] = useState(true); //loading de load Rankinggroup
@@ -33,7 +33,13 @@ export default function HomePage() {
     .catch(err => console.log(err));
     } ,[]);
 
-    
+    // 3. Hàm chuyển đổi theme
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    };
     useEffect(() => {
         setLoading(true); 
         fetch(`http://localhost:3000/api/lichthidau`)
@@ -54,7 +60,11 @@ export default function HomePage() {
         const firstNewsWithImage = news.find(item => item.imageUrl && item.imageUrl !== "");
     
     return (
-        <div>
+        <div className={styles.mainColor}>
+            {/* 4. Nút bấm chuyển chế độ Sáng/Tối */}
+            <button onClick={toggleTheme} className={styles.themeToggleBtn}>
+                {theme === 'light' ? '🌙 Chế độ tối' : '☀️ Chế độ sáng'}
+            </button>
             <div>
                 <UpcomingMatchesLayout matches = {upcomingMatches}/>
                  </div>
