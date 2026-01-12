@@ -1,6 +1,7 @@
 
 .nav_layout {
-    background-color: #ccc;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     flex-direction: row;
      justify-content: space-around;
@@ -10,13 +11,14 @@
     align-items: center;
     gap: 2px;
     font-size: 14px;
-    color: black;
+    color: var(--text-color);
     font-weight:  normal;
     line-height:  inherit;
 }
 h4 {
     font-size: 12px;
-    color: gray;
+    color: var(--text-color);
+    opacity: 0.6;
     font-weight:  normal;
     line-height:  inherit;
 }

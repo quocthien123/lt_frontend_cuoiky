@@ -3,6 +3,8 @@
 .container {
   max-width: 800px;
   margin: 0 auto;
+  background-color: var(--card-bg); 
+  color: var(--text-color);
   padding: 16px;
 }
 
@@ -16,8 +18,9 @@
 .tab,
 .activeTab {
   padding: 8px 16px;
-  border: 1px solid #ccc;
-  background: #f5f5f5;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg); 
+  color: var(--text-color);
   cursor: pointer;
   border-radius: 4px;
   font-size: 14px;
@@ -25,8 +28,8 @@
 
 .activeTab {
   background: #0066cc;
-  color: white;
   border-color: #0066cc;
+  color: white;
 }
 
 .schedule {
@@ -39,14 +42,15 @@
   font-size: 18px;
   margin: 16px 0 12px;
   color: #0066cc;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 4px;
 }
 
 .dateHeader {
   font-size: 16px;
   margin: 12px 0 8px;
-  color: #333;
+    background-color: var(--card-bg); 
+  color: var(--text-color);
 }
 
 .matches {
@@ -60,7 +64,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background: #fafafa;
+  background: var(--card-bg);
   border-radius: 6px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
@@ -97,14 +101,12 @@
   color: #e53935;
   font-weight: bold;
 }
-/* Container chính của lịch thi đấu */
 .schedule {
-  max-height: 400px;
+  max-height: 500px;
   overflow-y: auto;
   padding-right: 8px;
 }
 
-/* Tùy chỉnh thanh cuộn (tùy chọn, cho đẹp) */
 .schedule::-webkit-scrollbar {
   width: 6px;
 }
@@ -123,7 +125,6 @@
   background: #888;
 }
 
-/* Firefox */
 .schedule {
   scrollbar-width: thin;
   scrollbar-color: #aaa #f1f1f1;
