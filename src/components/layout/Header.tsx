@@ -21,30 +21,37 @@ const getSlug = (url: string) => {
 
 export default function Header() {
     const [menu, setMenus] = useState<Article[]>([]);
-    const { user, logout } = useAuth(); // 2. Lấy user và hàm logout ra
+    const { user, logout } = useAuth();
 
     useEffect(() => {
         fetch("http://localhost:3000/api/bongdaplus")
             .then(response => response.json())
-            .then(data => setMenus(data.data.article))
+            .then(data => {
+                if(data && data.data) setMenus(data.data.article);
+            })
+            .catch(err => console.log("API chưa chạy, menu sẽ tạm trống:", err));
     }, [])
 
     return (
         <header className={styles.header}>
             <Link className={styles.logo} to="/">Tinbong</Link>
 
-            {/* Menu giữ nguyên */}
-            <ul className={styles.nav_bar}>...</ul>
+            <ul className={styles.nav_bar}>
+                {menu && menu.map(item => (
+                    <li key={item.source_Link}>
+                        <Link to={`/danh-muc/${getSlug(item.source_Link)}`}>{item.title}</Link>
+                    </li>
+                ))}
+            </ul>
 
             <div className={styles.dropdown}>
                 <img src="/user.svg" alt="Avatar" className={styles.avatarrounded} />
                 <div className={styles.dropdownContent}>
-                    {/* 3. Dùng toán tử 3 ngôi để check user */}
                     {user ? (
                         <>
-                            <div className={styles.userInfo}>Chào, {user.fullName}</div>
+                            <div style={{padding: '10px', fontWeight: 'bold'}}>Chào, {user.fullName}</div>
                             <hr />
-                            <a onClick={logout} style={{cursor: 'pointer'}}>Đăng xuất</a>
+                            <a onClick={logout} style={{cursor: 'pointer', display: 'block', padding: '10px'}}>Đăng xuất</a>
                         </>
                     ) : (
                         <>
@@ -55,5 +62,5 @@ export default function Header() {
                 </div>
             </div>
         </header>
-    )
+    );
 }

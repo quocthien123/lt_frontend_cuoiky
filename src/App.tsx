@@ -7,10 +7,12 @@ import NewPage from './pages/News/NewsPage'
 import {RegisterPage} from "@/pages/Auth/Register/RegisterPage.tsx";
 import {LoginPage} from "@/pages/Auth/Login/LoginPage.tsx";
 import {AuthProvider} from "@/context/AuthContext.tsx";
+import {Toaster} from "react-hot-toast";
 
 export default function App() {
     return (
         <AuthProvider>
+            <Toaster position="top-right"/>
             <Router>
                 <Routes>
                     <Route

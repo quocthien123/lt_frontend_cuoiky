@@ -3,11 +3,15 @@ import styles from './RegisterPage.module.css';
 import {
     saveUserToStorage
 } from "@/pages/Auth/Register/register.service.ts";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import React from "react";
 import {validateAllFields, validateField} from "@/utils/authValidation.ts";
+import toast from "react-hot-toast";
 
 export const RegisterPage = () => {
+
+    // Khởi tạo navigate
+    const navigate = useNavigate();
 
     // Khai báo State cần cho form
     const [formData, setFormData] = useState({
@@ -55,9 +59,12 @@ export const RegisterPage = () => {
 
         try {
             saveUserToStorage(formData);
-            alert('Đăng ký thành công...');
+            toast.success("Đăng ký thành công! Vui lòng đăng nhập.");
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
         } catch (error) {
-            alert(error);
+            toast.error((error as Error).message);
         }
     };
 
