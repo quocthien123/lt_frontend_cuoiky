@@ -5,7 +5,7 @@ export interface PasswordRequirement {
   met: boolean;
 }
 
-// Check individual password requirements
+// Hàm kiểm tra các yêu cầu về mật khẩu
 export const checkPasswordRequirements = (
   password: string
 ): PasswordRequirement[] => {
@@ -33,7 +33,6 @@ export const checkPasswordRequirements = (
   ];
 };
 
-// Check if all password requirements are met
 export const isPasswordStrong = (password: string): boolean => {
   const requirements = checkPasswordRequirements(password);
   return requirements.every((req) => req.met);
@@ -43,7 +42,7 @@ export const validateField = (
   name: string,
   value: string,
   allValues?: Record<string, string>,
-  isLogin: boolean = false // Add flag to skip password strength check on login
+  isLogin: boolean = false
 ) => {
   switch (name) {
     case "fullName":
@@ -53,11 +52,9 @@ export const validateField = (
       return !isEmailValid(value.trim()) ? "Email không hợp lệ" : "";
 
     case "password":
-      // On login, just check if password exists, don't validate strength
       if (isLogin) {
         return value.trim().length === 0 ? "Vui lòng nhập mật khẩu" : "";
       }
-      // On register, check password strength
       return !isPasswordStrong(value.trim()) ? "Mật khẩu chưa đủ mạnh" : "";
 
     case "confirmPassword":

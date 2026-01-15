@@ -14,7 +14,6 @@ interface FavoriteArticle {
 
 export default function FavoritesPage() {
   const { user } = useAuth();
-  // Initialize favorites from localStorage directly
   const [favorites, setFavorites] = useState<FavoriteArticle[]>(() => {
     if (user) {
       return getUserFavorites(user.email);
@@ -22,6 +21,7 @@ export default function FavoritesPage() {
     return [];
   });
 
+  // Xử lý xóa bài viết khỏi danh sách yêu thích
   const handleRemove = (article: FavoriteArticle) => {
     if (user) {
       toggleFavorite(user.email, article);

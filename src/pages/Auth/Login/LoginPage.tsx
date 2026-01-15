@@ -8,46 +8,40 @@ import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 
 export const LoginPage = () => {
-  const { login } = useAuth(); // 2. Lấy hàm login từ kho dùng chung
-  const navigate = useNavigate(); // Dùng cái này để chuyển trang mượt hơn
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  // State cho form
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  // State cho lỗi validation
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
 
-  // State hiện/ẩn mật khẩu
   const [showPassword, setShowPassword] = useState(false);
 
-  // Xử lý thay đổi input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
 
     const newFormData = { ...formData, [id]: value };
     setFormData(newFormData);
 
-    const errorMsg = validateField(id, value, newFormData, true); // Pass true for isLogin
+    const errorMsg = validateField(id, value, newFormData, true);
     setErrors((prev) => ({ ...prev, [id]: errorMsg }));
   };
 
-  // Xử lý đăng nhập
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate các fields
     const emailError = validateField("email", formData.email, formData, true);
     const passwordError = validateField(
       "password",
       formData.password,
       formData,
-      true // Pass true for isLogin
+      true
     );
 
     if (emailError || passwordError) {
@@ -66,10 +60,10 @@ export const LoginPage = () => {
       );
 
       if (user) {
-        login(user); // Thay vì tự set localStorage, gọi hàm này để "thông báo" cho cả App
+        login(user);
         toast.success(`Đăng nhập thành công, chào mừng ${user.fullName}!`);
         setTimeout(() => {
-          navigate("/"); // Chuyển về trang chủ sau 2 giây
+          navigate("/");
         }, 2000);
       } else {
         toast.error("Email hoặc mật khẩu không đúng!");

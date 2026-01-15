@@ -4,6 +4,7 @@ import styles from "./NewPage.module.css";
 import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 import { toggleFavorite, isArticleLiked } from "@/services/favorite.service.ts";
+import { CommentSection } from "@/components/comments/CommentSection";
 
 interface ContentBlock {
   type: "text" | "image" | "caption";
@@ -26,8 +27,7 @@ function CategoryPage() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  const { user } = useAuth(); // Lấy thông tin user từ context
-  // Khởi tạo trạng thái yêu thích từ localStorage - sẽ cập nhật khi thêm/xóa yêu thích
+  const { user } = useAuth();
   const [isLiked, setIsLiked] = useState(() => {
     if (user && slug) {
       return isArticleLiked(user.email, slug);
@@ -35,7 +35,6 @@ function CategoryPage() {
     return false;
   });
 
-  // Định nghĩa hàm dừng nói
   const stopSpeaking = () => {
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
@@ -48,7 +47,6 @@ function CategoryPage() {
 
     let isMounted = true;
 
-    // Trì hoãn cập nhật state để tránh cảnh báo React Compiler
     queueMicrotask(() => {
       if (isMounted) {
         setLoading(true);
@@ -93,7 +91,6 @@ function CategoryPage() {
     };
   }, []);
 
-  // Xử lý khi nhấn nút yêu thích
   const handleLikeClick = () => {
     if (!user) {
       toast.error("Vui lòng đăng nhập để sử dụng tính năng này.");
@@ -306,6 +303,8 @@ function CategoryPage() {
             </ul>
           </section>
         )}
+
+        {slug && <CommentSection articleSlug={slug} />}
       </article>
     </div>
   );
