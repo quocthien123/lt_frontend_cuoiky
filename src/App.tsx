@@ -1,3 +1,4 @@
+// App.tsx
 import './App.css'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
@@ -8,36 +9,34 @@ import {RegisterPage} from "@/pages/Auth/Register/RegisterPage.tsx";
 import {LoginPage} from "@/pages/Auth/Login/LoginPage.tsx";
 import {AuthProvider} from "@/context/AuthContext.tsx";
 import {Toaster} from "react-hot-toast";
+// Import Layout & Pages
+import MatchDetailPage from './pages/MatchDetail'
+
 
 export default function App() {
     return (
         <AuthProvider>
             <Toaster position="top-right"/>
             <Router>
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <MainLayout>
-                                <HomePage/>
-                            </MainLayout>
-                        }
-                    />
-                    <Route path="/register" element={<RegisterPage/>}/>
-                    <Route path="/login" element={<LoginPage/>}/>
+                <MainLayout>
+                    <Routes>
+                        {/* Trang chủ */}
+                        <Route path="/" element={<HomePage />} />
 
-                    <Route
-                        path="/danh-muc/:slug"
-                        element={
-                            <CategoryPage/>
-                        }
+                        {/* Đăng ký & Đăng nhập */}
+                        <Route path="/register" element={<RegisterPage/>}/>
+                        <Route path="/login" element={<LoginPage/>}/>
 
+                        {/* Chi tiết trận đấu */}
+                        <Route path="/match/:id" element={<MatchDetailPage />} />
 
-                    />
-                    <Route path="/:category/:slug" element={<NewPage/>}/>
+                        {/* Trang danh mục */}
+                        <Route path="/danh-muc/:slug" element={<CategoryPage/>} />
 
-                    {/* Additional routes: /matches, /news, /standings... will be added later */}
-                </Routes>
+                        {/* Trang chi tiết tin tức */}
+                        <Route path="/:category/:slug" element={<NewPage/>} />
+                    </Routes>
+                </MainLayout>
             </Router>
         </AuthProvider>
     );

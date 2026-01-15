@@ -208,6 +208,90 @@ function CategoryPage() {
                     </div>
 
                 </div>
+                return (
+                <div>
+                    <MainLayout>
+
+
+                        {/* Tiêu đề bài viết */}
+                        <h1 className={styles.title}>{article.title}</h1>
+
+                        <article className={styles.news_article}>
+                            {article.summary && (
+                                <div className={styles.summary}>
+                                    <b>{article.summary}</b>
+                                </div>
+                            )}
+
+
+                            <div className={styles.article_content}>
+                                {article.contentBlocks.map((block, index) => {
+                                    if (block.type === 'text') {
+                                        return (
+                                            <p key={index} className={styles.lines}>
+                                                {block.content}
+                                            </p>
+                                        );
+                                    }
+
+                                    if (block.type === 'image') {
+                                        return (
+                                            <div key={index} style={{textAlign: 'center', margin: '1.5rem 0'}}>
+                                                <img
+                                                    src={block.content}
+                                                    alt={`Hình minh họa ${index}`}
+                                                    style={{maxWidth: '100%', height: 'auto', borderRadius: '4px'}}
+                                                />
+                                            </div>
+                                        );
+                                    }
+
+                                    if (block.type === 'caption') {
+                                        return (
+                                            <p
+                                                key={index}
+                                                style={{
+                                                    textAlign: 'center',
+                                                    fontSize: '0.9rem',
+                                                    color: '#666',
+                                                    fontStyle: 'italic',
+                                                    marginTop: '-0.5rem',
+                                                    marginBottom: '1.5rem',
+                                                }}
+                                            >
+                                                {block.content}
+                                            </p>
+                                        );
+                                    }
+                                    return null;
+                                })}
+                            </div>
+
+                            {/* Tin liên quan */}
+                            {article.relatedArticles && article.relatedArticles.length > 0 && (
+                                <section className="related-articles"
+                                         style={{marginTop: '2rem', borderTop: '1px solid #eee', paddingTop: '1.5rem'}}>
+                                    <h3 style={{marginBottom: '1rem'}}>Tin liên quan</h3>
+                                    <ul style={{paddingLeft: '1.2rem'}}>
+                                        {article.relatedArticles.map((rel, i) => (
+                                            <li key={i} style={{marginBottom: '0.5rem'}}>
+                                                <Link
+                                                    to={rel.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{color: '#0066cc', textDecoration: 'none'}}
+                                                >
+                                                    {rel.title}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </section>
+                            )}
+                        </article>
+                    </MainLayout>
+                </div>
+                );
 
                 <article className={styles.news_article}>
                     {article.summary && (
@@ -283,6 +367,7 @@ function CategoryPage() {
                     )}
                 </article>
             </MainLayout>
+
         </div>
     );
 }

@@ -1,52 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as cheerio from 'cheerio';
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const matchUrl = searchParams.get('url'); 
 
-  if (!matchUrl) return NextResponse.json({ error: 'Thiếu URL' }, { status: 400 });
+    const { searchParams } = new URL(request.url);
+    const fullId = searchParams.get('id'); 
 
-  try {
+    if (!fullId) {
+        return NextResponse.json({ success: false, message: "Thiếu ID trận đấu (Dạng folder/id)" }, { status: 400 });
+    }
 
-    const fullUrl = matchUrl.startsWith('http') ? matchUrl : `https://bongdaplus.vn${matchUrl}`;
+    const parts = fullId.split('/');
+    const matchIdOnly = parts[parts.length - 1];
+
+    try {
+        const detailUrl = `https://data.bongdaplus.vn/data/${fullId}.json?_=${Date.now()}`;
+        const h2hUrl = `https://data.bongdaplus.vn/data/${fullId.replace(matchIdOnly, matchIdOnly + '-h2h')}.json?_=${Date.now()}`;
+
+        // console.log("Fetching:", detailUrl);
+
+        const [detailRes, h2hRes] = await Promise.all([
+            fetch(detailUrl),
+            fetch(h2hUrl)
+        ]);
+
+
+        if (!detailRes.ok) throw new Error("Không tìm thấy dữ liệu trận đấu");
+
+        const detailData = await detailRes.json();
+        
+
+        let h2hData = null;
+        if (h2hRes.ok) {
+            h2hData = await h2hRes.json();
+        }
+
     
-    const res = await fetch(fullUrl, { cache: 'no-store' });
-    const html = await res.text();
-    const $ = cheerio.load(html);
+        const responseData = {
+            ...detailData,
+            h2h: h2hData  
+        };
 
-
-    const events: any[] = [];
-    $('.timeline .event-item').each((i, el) => {
-        events.push({
-            minute: $(el).find('.minute').text().trim(),
-            player: $(el).find('.player').text().trim(),
-            type: $(el).hasClass('goal') ? 'goal' : 'card', 
-            team: $(el).hasClass('home-event') ? 'home' : 'away'
+        return NextResponse.json({ success: true, data: responseData }, {
+            status: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+            }
         });
-    });
 
-
-    const history: any[] = [];
-    $('.head-to-head .row').each((i, el) => {
-        history.push({
-            home: $(el).find('.team-1').text(),
-            score: $(el).find('.score').text(),
-            away: $(el).find('.team-2').text(),
-            date: $(el).find('.date').text()
-        });
-    });
-
-
-    const lineups = { home: [], away: [] };
-
-
-    return NextResponse.json({ 
-        success: true, 
-        data: { events, history, lineups } 
-    });
-
-  } catch (error) {
-    return NextResponse.json({ error: 'Lỗi cào chi tiết' }, { status: 500 });
-  }
+    } catch (error) {
+        console.error("Lỗi Backend:", error);
+        return NextResponse.json({ success: false, message: "Lỗi lấy dữ liệu" }, { status: 500 });
+    }
 }
