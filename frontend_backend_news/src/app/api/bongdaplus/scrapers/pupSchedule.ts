@@ -32,10 +32,13 @@
 // }
 // fetchUpcomingMatches();
 import axios from 'axios';
+// import { json } from 'stream/consumers';
+// import { UpcomingMatch } from '../types'
+// Giả định bạn đã có URL đầy đủ từ bước 1
 import { UpcomingMatch } from '../types'
 
 // URL lấy danh sách trận đấu nổi bật
-const JSON_URL = `https://data.bongdaplus.vn/data/top-list-matches.json?_=${Date.now()}`; 
+const JSON_URL = `https://data.bongdaplus.vn/data/top-list-matches.json?_=${Date.now()}`;
 
 export async function fetchUpcomingMatches() {
   try {
