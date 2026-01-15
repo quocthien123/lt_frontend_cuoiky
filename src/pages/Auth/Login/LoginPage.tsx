@@ -33,7 +33,7 @@ export const LoginPage = () => {
     const newFormData = { ...formData, [id]: value };
     setFormData(newFormData);
 
-    const errorMsg = validateField(id, value, newFormData);
+    const errorMsg = validateField(id, value, newFormData, true); // Pass true for isLogin
     setErrors((prev) => ({ ...prev, [id]: errorMsg }));
   };
 
@@ -42,11 +42,12 @@ export const LoginPage = () => {
     e.preventDefault();
 
     // Validate các fields
-    const emailError = validateField("email", formData.email, formData);
+    const emailError = validateField("email", formData.email, formData, true);
     const passwordError = validateField(
       "password",
       formData.password,
-      formData
+      formData,
+      true // Pass true for isLogin
     );
 
     if (emailError || passwordError) {
