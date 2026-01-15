@@ -190,11 +190,18 @@ module.exports = mod;
 
 __turbopack_context__.s([
     "GET",
-    ()=>GET
+    ()=>GET,
+    "OPTIONS",
+    ()=>OPTIONS
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$index$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/index.js [app-route] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$load$2d$parse$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend_backend_news/node_modules/cheerio/dist/esm/load-parse.js [app-route] (ecmascript)");
 ;
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+};
 async function GET(request) {
     try {
         const urlToScrape = 'https://bongdaplus.vn/video';
@@ -249,7 +256,8 @@ async function GET(request) {
         return new Response(JSON.stringify(result, null, 2), {
             status: 200,
             headers: {
-                'Content-Type': 'application/json; charset=utf-8'
+                'Content-Type': 'application/json; charset=utf-8',
+                ...corsHeaders
             }
         });
     } catch (error) {
@@ -260,10 +268,17 @@ async function GET(request) {
         }), {
             status: 500,
             headers: {
-                'Content-Type': 'application/json; charset=utf-8'
+                'Content-Type': 'application/json; charset=utf-8',
+                ...corsHeaders
             }
         });
     }
+}
+async function OPTIONS() {
+    return new Response(JSON.stringify({}), {
+        status: 200,
+        headers: corsHeaders
+    });
 }
 }),
 ];

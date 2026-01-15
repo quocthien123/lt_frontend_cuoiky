@@ -41,3 +41,10 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export async function OPTIONS() {
+  return Response.json(
+    {},
+    { status: 200, headers: corsHeaders }
+  );
+}

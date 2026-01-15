@@ -8,6 +8,12 @@ interface VideoItem {
   timeLabel?: string;
 }
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
 export async function GET(request: NextRequest) {
   try {
     const urlToScrape = 'https://bongdaplus.vn/video';
@@ -73,7 +79,7 @@ export async function GET(request: NextRequest) {
 
     return new Response(JSON.stringify(result, null, 2), {
       status: 200,
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders },
     });
   } catch (error) {
     console.error('Lỗi khi cào dữ liệu:', error);
@@ -82,7 +88,14 @@ export async function GET(request: NextRequest) {
         error: 'Lỗi khi cào dữ liệu',
         message: (error as Error).message,
       }),
-      { status: 500, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+      { status: 500, headers: { 'Content-Type': 'application/json; charset=utf-8', ...corsHeaders } }
     );
   }
+}
+
+export async function OPTIONS() {
+  return new Response(
+    JSON.stringify({}),
+    { status: 200, headers: corsHeaders }
+  );
 }
