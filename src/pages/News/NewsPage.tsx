@@ -24,25 +24,38 @@ function CategoryPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
   const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const { user } = useAuth(); // Lấy thông tin user từ context
-  const [isLiked, setIsLiked] = useState(false);
-
-  // Kiểm tra trạng thái yêu thích khi user hoặc slug thay đổi
-  useEffect(() => {
+  // Khởi tạo trạng thái yêu thích từ localStorage - sẽ cập nhật khi thêm/xóa yêu thích
+  const [isLiked, setIsLiked] = useState(() => {
     if (user && slug) {
-      setIsLiked(isArticleLiked(user.email, slug));
+      return isArticleLiked(user.email, slug);
     }
-  }, [user, slug]);
+    return false;
+  });
+
+  // Định nghĩa hàm dừng nói
+  const stopSpeaking = () => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
+  };
 
   useEffect(() => {
     if (!category || !slug) return;
 
-    setLoading(true);
-    setError(null);
-    stopSpeaking();
+    let isMounted = true;
+
+    // Trì hoãn cập nhật state để tránh cảnh báo React Compiler
+    queueMicrotask(() => {
+      if (isMounted) {
+        setLoading(true);
+        setError(null);
+        stopSpeaking();
+      }
+    });
 
     fetch(
       `http://localhost:3000/api/get-new-description?category=${category}&slug=${slug}`
@@ -52,6 +65,7 @@ function CategoryPage() {
         return res.json();
       })
       .then((result) => {
+        if (!isMounted) return;
         if (result.success && result.data) {
           setArticle(result.data);
         } else {
@@ -59,12 +73,18 @@ function CategoryPage() {
         }
       })
       .catch((err) => {
+        if (!isMounted) return;
         console.error(err);
         setError(err.message);
       })
       .finally(() => {
+        if (!isMounted) return;
         setLoading(false);
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, [category, slug]);
 
   useEffect(() => {
@@ -79,21 +99,20 @@ function CategoryPage() {
       toast.error("Vui lòng đăng nhập để sử dụng tính năng này.");
       return;
     }
-    if (slug) {
-      const liked = toggleFavorite(user.email, slug);
+    if (slug && article && category) {
+      const articleData = {
+        slug,
+        category,
+        title: article.title,
+        thumb:
+          article.contentBlocks.find((b) => b.type === "image")?.content || "",
+      };
+      const liked = toggleFavorite(user.email, articleData);
       setIsLiked(liked);
       toast.success(
         liked ? "Đã thêm vào mục yêu thích!" : "Đã gỡ khỏi mục yêu thích!"
       );
     }
-  };
-
-  const stopSpeaking = () => {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-    setIsSpeaking(false);
-    setIsPaused(false);
   };
 
   const handleToggleSpeech = () => {
@@ -119,7 +138,6 @@ function CategoryPage() {
     utterance.lang = "vi-VN";
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
-    utterance.voice;
 
     utterance.onend = () => {
       setIsSpeaking(false);
