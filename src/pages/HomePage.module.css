@@ -24,9 +24,6 @@
     width: 30%;
 
 }
-/* HomePage.module.css */
-
-/* Ví dụ về nút đổi màu */
 .themeToggleBtn {
     position: fixed;
     top: 20px;
@@ -41,16 +38,11 @@
 }
 
 .newsContainer {
-    /* Sử dụng biến thay vì màu cứng */
     background-color: var(--bg-color); 
 }
-
-/* Đảm bảo các thẻ H2, H3 nhận đúng màu */
 h2, h3 {
     color: var(--heading-color);
 }
-
-/* Nếu bạn có style riêng cho card trong file này */
 .newsLeft, .listNewsNoImage {
    background-color: var(--bg-color);
    color: var(--text-color);

@@ -1,7 +1,6 @@
 import * as cheerio from 'cheerio';
 import { News } from '../types';
-import { Article } from '../types';
-
+// import { Article } from '../types';
 
 export function scrapeNews($: cheerio.CheerioAPI): News[] {
   const newsList: News[] = [];

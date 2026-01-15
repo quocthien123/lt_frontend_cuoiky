@@ -24,5 +24,7 @@ dist-ssr
 *.sw?
 
 # Next.js
-.next/
+frontend_backend_news/.next/
+dist/
+.env
 

@@ -95,3 +95,26 @@ ul li a {
   padding: 0;
   gap: 20px;   
 }
+.themeToggleBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.newsContainer {
+    background-color: var(--bg-color); 
+}
+h2, h3 {
+    color: var(--heading-color);
+}
+.newsLeft, .listNewsNoImage {
+   background-color: var(--bg-color);
+   color: var(--text-color);
+}
