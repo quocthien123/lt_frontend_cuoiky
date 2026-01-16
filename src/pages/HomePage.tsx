@@ -1,3 +1,4 @@
+
 import NewCard from "../components/news/NewCard";
 import { useEffect, useState } from "react";
 import styles from "./HomePage.module.css";
@@ -175,3 +176,4 @@ export default function HomePage() {
     </div>
   );
 }
+

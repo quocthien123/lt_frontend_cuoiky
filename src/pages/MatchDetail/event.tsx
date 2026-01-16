@@ -1,4 +1,4 @@
-// src/pages/Matches/MatchDetail/EventsTab.tsx
+// src/pages/MatchDetail/event.tsx
 import type { MatchData } from './types';
 
 const getEventText = (type: number) => {

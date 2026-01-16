@@ -1,4 +1,4 @@
-// src/pages/Matches/MatchDetail/H2HTab.tsx
+// src/pages/MatchDetail/h2h.tsx
 import type { MatchData } from './types';
 
 export default function H2HTab({ data }: { data: MatchData }) {

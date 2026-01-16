@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from "react";
 import { useParams } from 'react-router-dom';
 import styles from "./NewPage.module.css";
@@ -6,6 +7,7 @@ import toast from "react-hot-toast";
 import { toggleFavorite, isArticleLiked } from "@/services/favorite.service.ts";
 import { CommentSection } from "@/components/comments/CommentSection";
 import { addToReadingHistory } from "@/services/reading-history.service";
+
 
 interface ContentBlock {
   type: "text" | "image" | "caption";
@@ -166,6 +168,7 @@ function CategoryPage() {
 
   return (
     <div>
+
       {/* Tiêu đề bài viết */}
       <h1 className={styles.title}>{article.title}</h1>
       <div
@@ -177,6 +180,7 @@ function CategoryPage() {
           alignItems: "center",
         }}
       >
+
         {/* --- 3. Giao diện Nút Báo Nói --- */}
         <div className={styles.speak_news}>
           <button
@@ -311,6 +315,7 @@ function CategoryPage() {
             </ul>
           </section>
         )}
+
 
         {slug && <CommentSection articleSlug={slug} />}
       </article>

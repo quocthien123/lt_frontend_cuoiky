@@ -1,4 +1,4 @@
-// src/pages/Matches/MatchDetail/LineupsTab.tsx
+// src/pages/Matches/MatchDetail/lineups.tsx
 import type{ MatchData, Player } from './types';
 
 const PlayerRow = ({ p }: { p: Player }) => (

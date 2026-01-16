@@ -1,3 +1,4 @@
+// src/pages/MatchDetail/types.tsx
 export interface Player {
     id: string;
     name: string;

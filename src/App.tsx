@@ -10,10 +10,12 @@ import { LoginPage } from "@/pages/Auth/Login/LoginPage.tsx";
 import { AuthProvider } from "@/context/AuthContext.tsx";
 import { Toaster } from "react-hot-toast";
 // Import Layout & Pages
+
 import MatchDetailPage from "./pages/MatchDetail";
 import FavoritesPage from "./pages/Favorites/FavoritesPage";
 import RecentlyViewedPage from "./pages/RecentlyViewed/RecentlyViewedPage";
 import VideoPage from "./pages/videos/VideoPages";
+
 
 export default function App() {
   return (
@@ -28,6 +30,7 @@ export default function App() {
             {/* Đăng ký & Đăng nhập */}
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
+
 
             {/* Trang chứa các bài báo yêu thích */}
             <Route path="/favorites" element={<FavoritesPage />} />
@@ -47,6 +50,9 @@ export default function App() {
 
             {/* trang hiển thị videos */}
             <Route path="/danh-muc/video" element={<VideoPage />} />
+
+
+         
           </Routes>
         </MainLayout>
       </Router>
