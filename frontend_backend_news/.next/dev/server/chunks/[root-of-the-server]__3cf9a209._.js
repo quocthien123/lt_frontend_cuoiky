@@ -202,6 +202,38 @@ const corsHeaders = {
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 };
+const normalizeUrl = (url)=>{
+    if (!url) return '';
+    const base = 'https://bongdaplus.vn';
+    const trimmed = url.trim();
+    return trimmed.startsWith('http') ? trimmed : base + (trimmed.startsWith('/') ? trimmed : '/' + trimmed);
+};
+const fetchVideoUrlFromArticle = async (articleUrl)=>{
+    try {
+        const res = await fetch(articleUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+        });
+        if (!res.ok) return null;
+        const html = await res.text();
+        const $ = __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$load$2d$parse$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["load"](html);
+        const youtubeIframe = $('iframe[src*="youtube.com/embed"]').first();
+        if (youtubeIframe.length > 0) {
+            const src = youtubeIframe.attr('src')?.trim();
+            if (src) {
+                const videoId = new URL(src).pathname.split('/').pop();
+                if (videoId) {
+                    return `https://www.youtube.com/watch?v=${videoId}`;
+                }
+            }
+        }
+        return null;
+    } catch (err) {
+        console.warn(`Không thể lấy video từ ${articleUrl}:`, err.message);
+        return null;
+    }
+};
 async function GET(request) {
     try {
         const urlToScrape = 'https://bongdaplus.vn/video';
@@ -215,17 +247,9 @@ async function GET(request) {
         const html = await res.text();
         const $ = __TURBOPACK__imported__module__$5b$project$5d2f$frontend_backend_news$2f$node_modules$2f$cheerio$2f$dist$2f$esm$2f$load$2d$parse$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["load"](html);
         const result = {
-            highlights: [],
             diemTin: [],
             otherVideos: []
         };
-        // Hàm helper chuẩn hóa URL
-        const normalizeUrl = (url)=>{
-            if (!url) return '';
-            const base = 'https://bongdaplus.vn';
-            return url.startsWith('http') ? url : base + (url.startsWith('/') ? url : '/' + url);
-        };
-        // Hàm trích xuất danh sách video từ một section theo tiêu đề
         const extractVideosByCaption = (captionText)=>{
             const section = $(`section.cat-news`).filter((_, el)=>{
                 return $(el).find('.caption').text().trim() === captionText;
@@ -249,10 +273,21 @@ async function GET(request) {
             });
             return items;
         };
-        // Trích xuất từng phần
-        result.highlights = extractVideosByCaption('Highlights');
-        result.diemTin = extractVideosByCaption('Điểm tin');
-        result.otherVideos = extractVideosByCaption('Video khác');
+        const diemTinRaw = extractVideosByCaption('Điểm tin');
+        const otherVideosRaw = extractVideosByCaption('Video khác');
+        const allItems = [
+            ...diemTinRaw,
+            ...otherVideosRaw
+        ];
+        const videoUrls = await Promise.all(allItems.map((item)=>fetchVideoUrlFromArticle(item.url)));
+        const validItems = allItems.filter((_, index)=>videoUrls[index] !== null);
+        validItems.forEach((item, index)=>{
+            item.videoUrl = videoUrls[allItems.indexOf(item)];
+        });
+        const filteredDiemTin = validItems.filter((item)=>diemTinRaw.some((raw)=>raw.url === item.url));
+        const filteredOtherVideos = validItems.filter((item)=>otherVideosRaw.some((raw)=>raw.url === item.url));
+        result.diemTin = filteredDiemTin;
+        result.otherVideos = filteredOtherVideos;
         return new Response(JSON.stringify(result, null, 2), {
             status: 200,
             headers: {
@@ -275,7 +310,7 @@ async function GET(request) {
     }
 }
 async function OPTIONS() {
-    return new Response(JSON.stringify({}), {
+    return new Response(null, {
         status: 200,
         headers: corsHeaders
     });

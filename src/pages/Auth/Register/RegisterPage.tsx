@@ -8,17 +8,14 @@ import toast from "react-hot-toast";
 import { PasswordStrengthIndicator } from "@/components/auth/PasswordStrengthIndicator";
 
 export const RegisterPage = () => {
-  // Khởi tạo navigate
   const navigate = useNavigate();
 
-  // Khai báo State cần cho form
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  // State cho lỗi validation
   const [errors, setErrors] = useState({
     fullName: "",
     email: "",
@@ -32,14 +29,11 @@ export const RegisterPage = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
 
-    // Cập nhật dữ liệu cho form
     setFormData((prev) => ({ ...prev, [id]: value }));
 
-    // Cập nhật formData
     const newFormData = { ...formData, [id]: value };
     setFormData(newFormData);
 
-    // Validate field với formData mới
     const errorMsg = validateField(id, value, newFormData);
     setErrors((prev) => ({ ...prev, [id]: errorMsg }));
   };
@@ -47,7 +41,6 @@ export const RegisterPage = () => {
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate tất cả fields
     const validationErrors = validateAllFields(formData);
 
     if (validationErrors) {
@@ -84,7 +77,6 @@ export const RegisterPage = () => {
                 required
               />
             </div>
-            {/* Hiển thị lỗi ở đây */}
             {errors.fullName && (
               <span className={styles.errorText}>{errors.fullName}</span>
             )}

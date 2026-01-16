@@ -12,7 +12,6 @@ export const PasswordStrengthIndicator = ({
   const metCount = requirements.filter((req) => req.met).length;
   const totalCount = requirements.length;
 
-  // Không hiển thị gì nếu mật khẩu rỗng
   if (!password) return null;
 
   return (

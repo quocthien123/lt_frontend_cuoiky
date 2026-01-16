@@ -4,14 +4,49 @@ import * as cheerio from 'cheerio';
 interface VideoItem {
   title: string;
   img: string;
-  url: string;
+  url: string; // URL bài viết
   timeLabel?: string;
+  videoUrl?: string; // ← chỉ gán nếu là YouTube
 }
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+const normalizeUrl = (url: string): string => {
+  if (!url) return '';
+  const base = 'https://bongdaplus.vn';
+  const trimmed = url.trim();
+  return trimmed.startsWith('http') ? trimmed : base + (trimmed.startsWith('/') ? trimmed : '/' + trimmed);
+};
+
+const fetchVideoUrlFromArticle = async (articleUrl: string): Promise<string | null> => {
+  try {
+    const res = await fetch(articleUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+    });
+    if (!res.ok) return null;
+
+    const html = await res.text();
+    const $ = cheerio.load(html);
+
+    const youtubeIframe = $('iframe[src*="youtube.com/embed"]').first();
+    if (youtubeIframe.length > 0) {
+      const src = youtubeIframe.attr('src')?.trim();
+      if (src) {
+        const videoId = new URL(src).pathname.split('/').pop();
+        if (videoId) {
+          return `https://www.youtube.com/watch?v=${videoId}`;
+        }
+      }
+    }
+    return null;
+  } catch (err) {
+    console.warn(`Không thể lấy video từ ${articleUrl}:`, (err as Error).message);
+    return null;
+  }
 };
 
 export async function GET(request: NextRequest) {
@@ -29,23 +64,13 @@ export async function GET(request: NextRequest) {
     const $ = cheerio.load(html);
 
     const result: {
-      highlights: VideoItem[];
       diemTin: VideoItem[];
       otherVideos: VideoItem[];
     } = {
-      highlights: [],
       diemTin: [],
       otherVideos: [],
     };
 
-    // Hàm helper chuẩn hóa URL
-    const normalizeUrl = (url: string): string => {
-      if (!url) return '';
-      const base = 'https://bongdaplus.vn';
-      return url.startsWith('http') ? url : base + (url.startsWith('/') ? url : '/' + url);
-    };
-
-    // Hàm trích xuất danh sách video từ một section theo tiêu đề
     const extractVideosByCaption = (captionText: string): VideoItem[] => {
       const section = $(`section.cat-news`).filter((_, el) => {
         return $(el).find('.caption').text().trim() === captionText;
@@ -72,10 +97,28 @@ export async function GET(request: NextRequest) {
       return items;
     };
 
-    // Trích xuất từng phần
-    result.highlights = extractVideosByCaption('Highlights');
-    result.diemTin = extractVideosByCaption('Điểm tin');
-    result.otherVideos = extractVideosByCaption('Video khác');
+    const diemTinRaw = extractVideosByCaption('Điểm tin');
+    const otherVideosRaw = extractVideosByCaption('Video khác');
+
+    const allItems = [...diemTinRaw, ...otherVideosRaw];
+    const videoUrls = await Promise.all(
+      allItems.map(item => fetchVideoUrlFromArticle(item.url))
+    );
+
+    const validItems = allItems.filter((_, index) => videoUrls[index] !== null);
+    validItems.forEach((item, index) => {
+      item.videoUrl = videoUrls[allItems.indexOf(item)]!;
+    });
+
+    const filteredDiemTin = validItems.filter(item =>
+      diemTinRaw.some(raw => raw.url === item.url)
+    );
+    const filteredOtherVideos = validItems.filter(item =>
+      otherVideosRaw.some(raw => raw.url === item.url)
+    );
+
+    result.diemTin = filteredDiemTin;
+    result.otherVideos = filteredOtherVideos;
 
     return new Response(JSON.stringify(result, null, 2), {
       status: 200,
@@ -94,8 +137,5 @@ export async function GET(request: NextRequest) {
 }
 
 export async function OPTIONS() {
-  return new Response(
-    JSON.stringify({}),
-    { status: 200, headers: corsHeaders }
-  );
+  return new Response(null, { status: 200, headers: corsHeaders });
 }
