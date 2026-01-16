@@ -55,3 +55,16 @@ h2, h3 {
    background-color: var(--bg-color);
    color: var(--text-color);
 }
+
+/* HomePage.module.css */
+
+.mainColor {
+    line-height: 1.4;
+    max-width: 1200px; 
+    margin: 0 auto;   
+}
+
+
+h3{
+ font-size: 1.2rem !important;
+}

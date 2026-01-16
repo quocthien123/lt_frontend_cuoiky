@@ -1,14 +1,13 @@
-/* src/pages/Matches/bootstrap-iso.scss */
+
 .bs-scope {
-  /* Đây là cách gọi Bootstrap chính chủ từ thư viện */
   @import "bootstrap/scss/bootstrap";
   
-  /* Reset font để không bị lỗi font hệ thống */
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 16px;
   
-  /* Reset box-sizing để layout chuẩn */
   *, *::before, *::after {
     box-sizing: border-box;
   }
+
+
 }

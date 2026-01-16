@@ -14,7 +14,7 @@ button {
     width: 6rem; 
     height: 2rem; 
     font-weight: 500;
-    font-size: medium;
+    font-size: medium !important;
     color: white;
     background-color: #0066cc;
     border: none;

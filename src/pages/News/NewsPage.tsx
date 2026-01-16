@@ -1,9 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-<<<<<<< HEAD
-import MainLayout from '../../components/layout/MainLayout';
-=======
->>>>>>> huy
 import styles from './NewPage.module.css';
 
 interface ContentBlock {
@@ -122,11 +118,6 @@ function CategoryPage() {
 
   return (
     <div>
-<<<<<<< HEAD
-      <MainLayout>
-=======
-
->>>>>>> huy
         
         {/* Tiêu đề bài viết */}
         <h1 className={styles.title}>{article.title}</h1>
@@ -226,11 +217,7 @@ function CategoryPage() {
             </section>
           )}
         </article>
-<<<<<<< HEAD
-      </MainLayout>
-=======
-    
->>>>>>> huy
+
     </div>
   );
 }

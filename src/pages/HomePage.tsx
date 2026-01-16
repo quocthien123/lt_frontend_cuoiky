@@ -72,12 +72,12 @@ export default function HomePage() {
             <div className={styles.newsContainer}>
                 
                 <div className={styles.newsLeft}>
-                        <h2> Tin mới </h2>
+                        <h4> Tin mới </h4>
                       {firstNewsWithImage && <NewCard {...firstNewsWithImage}/>}
                 </div>
             
                 <ul className={styles.listNewsNoImage}>
-                    <h2>Tin vắn</h2>
+                    <h4>Tin vắn</h4>
                     {news
                         .filter(item => item.imageUrl == "")
                         .slice(1, 7)
@@ -89,7 +89,7 @@ export default function HomePage() {
 
 
                     <div className={styles.standingsdiv}>
-                           <h2> Bảng xếp hạng </h2>
+                           <h4> Bảng xếp hạng </h4>
                     {standings.length > 0 ? (
                         <Standings rankings={standings} />
                     ) : (
@@ -99,13 +99,13 @@ export default function HomePage() {
             </div>
             <div >
 
-                    <h2>Lịch thi đấu </h2>
+                    <h4>Lịch thi đấu </h4>
                     <div>
                         <Schedule leagues = {leagues} />
                     </div>
             </div>
             <div>
-            <h2> Tin bóng đá </h2>
+            <h4> Tin bóng đá </h4>
                         <div className={styles.gridNews}>
                     
                         {news
