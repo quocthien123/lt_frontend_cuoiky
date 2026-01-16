@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import styles from './LichThiDauPage.module.css';
 
-// === Interfaces ===
 export interface Match {
   home_name: string;
   home_logo: string;
@@ -30,23 +29,25 @@ export interface LeagueGroup {
   league_name: string;
   rounds: RoundGroup[];
 }
-function findCurrentRoundIndex(rounds: RoundGroup[]): number {
+function findCurrentRoundIndex(rounds: RoundGroup[] | undefined): number {
+  if (!Array.isArray(rounds) || rounds.length == 0) {
+    return 0;
+  }
+ 
+  // Tìm vòng đầu tiên có trận CHƯA KẾT THÚC (status !== '100')
   for (let i = 0; i < rounds.length; i++) {
-    const round = rounds[i];
-    const hasUpcomingOrLiveMatch = round.dates.some(dateGroup =>
-      dateGroup.matches.some(match => {
-        return  match.status != '100';
-      })
+    const hasUnfinished = rounds[i].dates?.some(dateGroup =>
+      dateGroup.matches?.some(match => match.status != '100')
     );
-    if (hasUpcomingOrLiveMatch) {
-      return i; 
+    if (hasUnfinished) {
+
+      return i;
     }
   }
-
-  return Math.max(0, rounds.length - 1);
+  
+  // Nếu tất cả các vòng đã đá xong → chọn vòng cuối cùng
+  return rounds.length - 1;
 }
-
-
 function MatchRow({ match }: { match: Match }) {
   const isFinished = match.status == '100';
   return (
@@ -82,7 +83,44 @@ function MatchRow({ match }: { match: Match }) {
     </div>
   );
 }
+export  function LeagueSchedule({ league }: { league: LeagueGroup }) {
+  // Đảm bảo rounds luôn là mảng
+  const rounds = Array.isArray(league.rounds) ? league.rounds : [];
 
+  const currentRoundIndex = findCurrentRoundIndex(rounds);
+  const roundsToShow = rounds.slice(currentRoundIndex, currentRoundIndex + 4);
+
+  return (
+    <div className={styles.schedule}>
+      {roundsToShow.length > 0 ? (
+        roundsToShow.map((round) => (
+          <div key={round.round_name} className={styles.round}>
+            <h3 className={styles.roundTitle}>Vòng {round.round_name}</h3>
+            {round.dates?.map((dateGroup) => (
+              <div key={dateGroup.date} className={styles.dateSection}>
+                <h4 className={styles.dateHeader}>
+                  {new Date(dateGroup.date).toLocaleDateString('vi-VN', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'numeric',
+                    year: 'numeric',
+                  })}
+                </h4>
+                <div className={styles.matches}>
+                  {dateGroup.matches?.map((match, idx) => (
+                    <MatchRow key={idx} match={match} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))
+      ) : (
+        <div className={styles.noData}>Không có dữ liệu lịch thi đấu.</div>
+      )}
+    </div>
+  );
+}
 export default function Schedule({ leagues }: { leagues: LeagueGroup[] }) {
   const [selectedLeagueIndex, setSelectedLeagueIndex] = useState(0);
 
@@ -92,10 +130,6 @@ export default function Schedule({ leagues }: { leagues: LeagueGroup[] }) {
 
   const selectedLeague = leagues[selectedLeagueIndex];
   if (!selectedLeague) return null;
-
-
-  const currentRoundIndex = findCurrentRoundIndex(selectedLeague.rounds);
-  const roundsToShow = selectedLeague.rounds.slice(currentRoundIndex, currentRoundIndex + 4);
 
   return (
     <div className={styles.container}>
@@ -111,30 +145,8 @@ export default function Schedule({ leagues }: { leagues: LeagueGroup[] }) {
         ))}
       </div>
 
-      <div className={styles.schedule}>
-        {roundsToShow.map((round) => (
-          <div key={round.round_name} className={styles.round}>
-            <h3 className={styles.roundTitle}>Vòng {round.round_name}</h3>
-            {round.dates.map((dateGroup) => (
-              <div key={dateGroup.date} className={styles.dateSection}>
-                <h4 className={styles.dateHeader}>
-                  {new Date(dateGroup.date).toLocaleDateString('vi-VN', {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'numeric',
-                    year: 'numeric',
-                  })}
-                </h4>
-                <div className={styles.matches}>
-                  {dateGroup.matches.map((match, idx) => (
-                    <MatchRow key={idx} match={match} />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
+      {/* Hiển thị lịch của giải đã chọn */}
+      <LeagueSchedule league={selectedLeague} />
     </div>
   );
 }

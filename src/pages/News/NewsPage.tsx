@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import styles from "./NewPage.module.css";
 import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
@@ -300,14 +300,12 @@ function CategoryPage() {
             <ul style={{ paddingLeft: "1.2rem" }}>
               {article.relatedArticles.map((rel, i) => (
                 <li key={i} style={{ marginBottom: "0.5rem" }}>
-                  <Link
-                    to={rel.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <a
+                    href={rel.url}
                     style={{ color: "#0066cc", textDecoration: "none" }}
                   >
                     {rel.title}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

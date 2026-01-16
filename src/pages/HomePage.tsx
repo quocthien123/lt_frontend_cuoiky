@@ -16,7 +16,7 @@ interface NewsItem {
   [key: string]: unknown;
 }
 
-interface UpcomingMatchItem {
+export interface UpcomingMatchItem {
   id: string | number;
   starttime: string | number;
   homeTeam: {
@@ -87,11 +87,8 @@ export default function HomePage() {
       item.category &&
       item.link
   );
-
-
   return (
     <div className={styles.mainColor}>
-      {/* 4. Nút bấm chuyển chế độ Sáng/Tối */}
       <button onClick={toggleTheme} className={styles.themeToggleBtn}>
         {theme === "light" ? "🌙 Chế độ tối" : "☀️ Chế độ sáng"}
       </button>
