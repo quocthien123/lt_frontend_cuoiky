@@ -59,6 +59,18 @@ export default function Header() {
                 Chào, {user.fullName}
               </div>
               <hr />
+              <Link
+                to="/favorites"
+                style={{ display: "block", padding: "10px" }}
+              >
+                ❤️ Tin đã lưu
+              </Link>
+              <Link
+                to="/recently-viewed"
+                style={{ display: "block", padding: "10px" }}
+              >
+                🕒 Lịch sử đọc
+              </Link>
               <a
                 onClick={() => {
                   logout();
