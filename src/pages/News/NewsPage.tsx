@@ -1,9 +1,16 @@
-import { useEffect, useState, useRef } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import styles from './NewPage.module.css';
+
+import { useEffect, useState, useRef } from "react";
+import { useParams } from 'react-router-dom';
+import styles from "./NewPage.module.css";
+import { useAuth } from "@/hooks/useAuth";
+import toast from "react-hot-toast";
+import { toggleFavorite, isArticleLiked } from "@/services/favorite.service.ts";
+import { CommentSection } from "@/components/comments/CommentSection";
+import { addToReadingHistory } from "@/services/reading-history.service";
+
 
 interface ContentBlock {
-  type: 'text' | 'image' | 'caption';
+  type: "text" | "image" | "caption";
   content: string;
 }
 
@@ -20,52 +27,101 @@ function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
   const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  useEffect(() => {
-    if (!category || !slug) return;
-
-    setLoading(true);
-    setError(null);
-    stopSpeaking();
-
-    fetch(`http://localhost:3000/api/get-new-description?category=${category}&slug=${slug}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Lỗi mạng hoặc server');
-        return res.json();
-      })
-      .then((result) => {
-        if (result.success && result.data) {
-          setArticle(result.data);
-        } else {
-          throw new Error(result.message || 'Không lấy được dữ liệu');
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [category, slug]);
-
-  
-  useEffect(() => {
-    return () => {
-      stopSpeaking();
-    };
-  }, []);
+  const { user } = useAuth();
+  const [isLiked, setIsLiked] = useState(() => {
+    if (user && slug) {
+      return isArticleLiked(user.email, slug);
+    }
+    return false;
+  });
 
   const stopSpeaking = () => {
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
     setIsSpeaking(false);
-    setIsPaused(false);
+  };
+
+  useEffect(() => {
+    if (!category || !slug) return;
+
+    let isMounted = true;
+
+    queueMicrotask(() => {
+      if (isMounted) {
+        setLoading(true);
+        setError(null);
+        stopSpeaking();
+      }
+    });
+
+    fetch(
+      `http://localhost:3000/api/get-new-description?category=${category}&slug=${slug}`
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error("Lỗi mạng hoặc server");
+        return res.json();
+      })
+      .then((result) => {
+        if (!isMounted) return;
+        if (result.success && result.data) {
+          setArticle(result.data);
+          {/* Thêm bài viết vào lịch sử đọc */}          
+          if (category && slug) {
+            addToReadingHistory({
+              slug,
+              category,
+              title: result.data.title,
+              thumb: result.data.contentBlocks.find((b: ContentBlock) => b.type === "image")?.content || "",
+            });
+          }
+        } else {
+          throw new Error(result.message || "Không lấy được dữ liệu");
+        }
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        console.error(err);
+        setError(err.message);
+      })
+      .finally(() => {
+        if (!isMounted) return;
+        setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [category, slug]);
+
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+    };
+  }, []);
+
+  const handleLikeClick = () => {
+    if (!user) {
+      toast.error("Vui lòng đăng nhập để sử dụng tính năng này.");
+      return;
+    }
+    if (slug && article && category) {
+      const articleData = {
+        slug,
+        category,
+        title: article.title,
+        thumb:
+          article.contentBlocks.find((b) => b.type === "image")?.content || "",
+      };
+      const liked = toggleFavorite(user.email, articleData);
+      setIsLiked(liked);
+      toast.success(
+        liked ? "Đã thêm vào mục yêu thích!" : "Đã gỡ khỏi mục yêu thích!"
+      );
+    }
   };
 
   const handleToggleSpeech = () => {
@@ -73,36 +129,31 @@ function CategoryPage() {
 
     const synth = window.speechSynthesis;
 
-
     if (isSpeaking) {
       stopSpeaking();
       return;
     }
 
-
     const fullText = [
-      article.title, 
-      article.summary, 
+      article.title,
+      article.summary,
       ...article.contentBlocks
-          .filter(b => b.type === 'text')
-          .map(b => b.content)
-    ].join('. '); 
+        .filter((b) => b.type === "text")
+        .map((b) => b.content),
+    ].join(". ");
 
     const utterance = new SpeechSynthesisUtterance(fullText);
-    
 
-    utterance.lang = 'vi-VN';
+    utterance.lang = "vi-VN";
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
-    utterance.voice
 
     utterance.onend = () => {
       setIsSpeaking(false);
     };
 
-
     utterance.onerror = (event) => {
-      console.error('Speech error:', event);
+      console.error("Speech error:", event);
       setIsSpeaking(false);
     };
 
@@ -111,113 +162,163 @@ function CategoryPage() {
     setIsSpeaking(true);
   };
 
-
   if (loading) return <div>Đang tải bài viết...</div>;
   if (error) return <div>Lỗi: {error}</div>;
   if (!article) return <div>Không tìm thấy bài viết.</div>;
 
   return (
     <div>
-        
-        {/* Tiêu đề bài viết */}
-        <h1 className={styles.title}>{article.title}</h1>
+
+      {/* Tiêu đề bài viết */}
+      <h1 className={styles.title}>{article.title}</h1>
+      <div
+        className={styles.action_bar}
+        style={{
+          display: "flex",
+          gap: "12px",
+          marginBottom: "20px",
+          alignItems: "center",
+        }}
+      >
 
         {/* --- 3. Giao diện Nút Báo Nói --- */}
         <div className={styles.speak_news}>
           <button
             onClick={handleToggleSpeech}
             style={{
-              padding: '10px 20px',
-              backgroundColor: isSpeaking ? '#e74c3c' : '#2ecc71',
-              borderRadius: '15px',
-              cursor: 'pointer',
+              padding: "10px 20px",
+              backgroundColor: isSpeaking ? "#e74c3c" : "#2ecc71",
+              width: "100%",
+              maxWidth: "250px",
+              borderRadius: "15px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
             }}
           >
             {isSpeaking ? (
               <>
-                <span>⏹</span> Dừng đọc
+                <span style={{ fontSize: "18px" }}>⏹</span> Dừng đọc
               </>
             ) : (
               <>
-                <span>🔊</span> Nghe báo nói
+                <span style={{ fontSize: "18px" }}>🔊</span> Nghe báo nói
               </>
             )}
           </button>
+          {/* Nút Yêu thích */}
+          <button
+            onClick={handleLikeClick}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: isLiked ? "#ff4757" : "#f1f2f6",
+              color: isLiked ? "#fff" : "#2f3542",
+              borderRadius: "15px",
+              width: "100%",
+              maxWidth: "200px",
+              border: "1px solid #ced4da",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              transition: "all 0.3s ease",
+            }}
+          >
+            <span style={{ fontSize: "18px" }}>{isLiked ? "❤️" : "🤍"}</span>
+            <span style={{ fontWeight: "500" }}>
+              {isLiked ? "Đã lưu" : "Lưu tin"}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <article className={styles.news_article}>
+        {article.summary && (
+          <div className={styles.summary}>
+            <b>{article.summary}</b>
+          </div>
+        )}
+
+        <div className={styles.article_content}>
+          {article.contentBlocks.map((block, index) => {
+            if (block.type === "text") {
+              return (
+                <p key={index} className={styles.lines}>
+                  {block.content}
+                </p>
+              );
+            }
+
+            if (block.type === "image") {
+              return (
+                <div
+                  key={index}
+                  style={{ textAlign: "center", margin: "1.5rem 0" }}
+                >
+                  <img
+                    src={block.content}
+                    alt={`Hình minh họa ${index}`}
+                    style={{
+                      maxWidth: "100%",
+                      height: "auto",
+                      borderRadius: "4px",
+                    }}
+                  />
+                </div>
+              );
+            }
+
+            if (block.type === "caption") {
+              return (
+                <p
+                  key={index}
+                  style={{
+                    textAlign: "center",
+                    fontSize: "0.9rem",
+                    color: "#666",
+                    fontStyle: "italic",
+                    marginTop: "-0.5rem",
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  {block.content}
+                </p>
+              );
+            }
+            return null;
+          })}
         </div>
 
-        <article className={styles.news_article} >
-          {article.summary && (
-            <div className={styles.summary}>
-              <b>{article.summary}</b>
-            </div>
-          )}
-
-  
-          <div className={styles.article_content}>
-            {article.contentBlocks.map((block, index) => {
-              if (block.type === 'text') {
-                return (
-                  <p key={index} className={styles.lines}>
-                    {block.content}
-                  </p>
-                );
-              }
-
-              if (block.type === 'image') {
-                return (
-                  <div key={index} style={{ textAlign: 'center', margin: '1.5rem 0' }}>
-                    <img
-                      src={block.content}
-                      alt={`Hình minh họa ${index}`}
-                      style={{ maxWidth: '100%', height: 'auto', borderRadius: '4px' }}
-                    />
-                  </div>
-                );
-              }
-
-              if (block.type === 'caption') {
-                return (
-                  <p
-                    key={index}
-                    style={{
-                      textAlign: 'center',
-                      fontSize: '0.9rem',
-                      color: '#666',
-                      fontStyle: 'italic',
-                      marginTop: '-0.5rem',
-                      marginBottom: '1.5rem',
-                    }}
+        {/* Tin liên quan */}
+        {article.relatedArticles && article.relatedArticles.length > 0 && (
+          <section
+            className="related-articles"
+            style={{
+              marginTop: "2rem",
+              borderTop: "1px solid #eee",
+              paddingTop: "1.5rem",
+            }}
+          >
+            <h3 style={{ marginBottom: "1rem" }}>Tin liên quan</h3>
+            <ul style={{ paddingLeft: "1.2rem" }}>
+              {article.relatedArticles.map((rel, i) => (
+                <li key={i} style={{ marginBottom: "0.5rem" }}>
+                  <a
+                    href={rel.url}
+                    style={{ color: "#0066cc", textDecoration: "none" }}
                   >
-                    {block.content}
-                  </p>
-                );
-              }
-              return null;
-            })}
-          </div>
+                    {rel.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
-          {/* Tin liên quan */}
-          {article.relatedArticles && article.relatedArticles.length > 0 && (
-            <section className="related-articles" style={{ marginTop: '2rem', borderTop: '1px solid #eee', paddingTop: '1.5rem' }}>
-              <h3 style={{ marginBottom: '1rem' }}>Tin liên quan</h3>
-              <ul style={{ paddingLeft: '1.2rem' }}>
-                {article.relatedArticles.map((rel, i) => (
-                  <li key={i} style={{ marginBottom: '0.5rem' }}>
-                    <Link
-                      to={rel.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: '#0066cc', textDecoration: 'none' }}
-                    >
-                      {rel.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </article>
 
+        {slug && <CommentSection articleSlug={slug} />}
+      </article>
     </div>
   );
 }

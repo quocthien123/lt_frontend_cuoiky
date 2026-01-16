@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
         //https://bongdaplus.vn/bong-da-viet-nams
   const urlToScrape = `https://bongdaplus.vn/${slug}`;
   const rankingUrl = `https://data.bongdaplus.vn/data/${slug}-rankings.json?_=${Date.now()}`
+  const ltdUrls = `https://data.bongdaplus.vn/data/${slug}-matches.json?_=${Date.now()}`
   console.log(`Đang cào dữ liệu từ: ${urlToScrape}`);
 const res = await fetch(urlToScrape, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MyScraper)' },
@@ -41,6 +42,7 @@ const res = await fetch(urlToScrape, {
 
     const articles_news: Article_News[] = []
       const standing = await leagueRanking(rankingUrl)
+      const rounds = await lichthidau(ltdUrls)
     $('.cat-news .news').each((i, el) => {
         
         const $el = $(el)
@@ -65,7 +67,8 @@ const res = await fetch(urlToScrape, {
         success: true,
         data: {
             articles_news,
-            standing
+            standing,
+            rounds,
         },
       },
       {status : 200,
@@ -107,6 +110,80 @@ export async function leagueRanking(leagueUrl : string) {
         standings: standings
       };
 };
+interface MatchItem {
+  round_name: string;
+  home_name: string;
+  home_logo: string;
+  away_name: string;
+  away_logo: string;
+  start_time: number | string;
+  goals_home: string | null;
+  goals_away: string | null;
+  status: string;
+}
+
+function getDateString(timestamp: any): string {
+  try {
+    return timestamp.split(' ')[0];
+  } catch {
+    return "unknown";
+  }
+}
+
+function groupBy<T>(array: T[], keyFn: (item: T) => string): Record<string, T[]> {
+  const result: Record<string, T[]> = {};
+  for (const item of array) {
+    const key = keyFn(item);
+    if (!result[key]) {
+      result[key] = [];
+    }
+    result[key].push(item);
+  }
+  return result;
+}
+
+export async function lichthidau(leagueUrl: string) {
+  try {
+    const response = await axios.get(leagueUrl);
+    const rawData = response.data;
+    if (!rawData?.matches || !Array.isArray(rawData.matches)) {
+      console.warn("Dữ liệu không hợp lệ:", rawData);
+      return { rounds: [] };
+    }
+
+    const matches = (rawData.matches as any[]).map((item) => ({
+      round_name: item.round_name,
+      home_name: item.home_name,
+      home_logo: `https://data.bongdaplus.vn/logo/${item.home_logo?.trim() ?? ''}`,
+      away_name: item.away_name,
+      away_logo: `https://data.bongdaplus.vn/logo/${item.away_logo?.trim() ?? ''}`,
+      start_time: item.start_time,
+      goals_home: item.goals_home,
+      goals_away: item.goals_away,
+      status: item.status,
+    })) as MatchItem[];
+
+    const roundsMap = groupBy(matches, (m) => m.round_name);
+    const rounds = Object.entries(roundsMap).map(([roundName, roundMatches]) => {
+      const datesMap = groupBy(roundMatches, (m) => getDateString(m.start_time));
+      const dates = Object.entries(datesMap).map(([date, matchesInDate]) => ({
+        date,
+        matches: matchesInDate,
+      }));
+      return {
+        round_name: roundName,
+        dates,
+      };
+    });
+
+    return { rounds };
+
+  } catch (error) {
+    console.error("Lỗi khi lấy lịch thi đấu từ URL:", leagueUrl, error);
+    return { rounds: [] };
+  }
+}
+
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }

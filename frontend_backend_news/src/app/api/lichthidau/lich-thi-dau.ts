@@ -2,12 +2,13 @@ import axios from 'axios';
 
 // types.ts hoặc ngay trong file
 interface MatchItem {
+  id: string; // Thêm ID vào đây
   round_name: string;
   home_name: string;
   home_logo: string;
   away_name: string;
   away_logo: string;
-  start_time: number; // hoặc string, tuỳ API
+  start_time: string; // Bongdaplus thường trả về chuỗi "YYYY-MM-DD HH:mm:ss"
   goals_home: string | null;
   goals_away: string | null;
   status: string;
@@ -52,29 +53,40 @@ function groupBy<T>(
 }
 
 
+
 export async function fetchLeaguesMatches() {
   try {
     const requests = LEAGUES.map(async (league) => {
       try {
         const response = await axios.get(league.url);
         const rawData = response.data;
-       const matches = (rawData.matches as any[]).map(item => ({
-            round_name: item.round_name,
-            home_name: item.home_name,
-            home_logo: `https://data.bongdaplus.vn/logo/${item.home_logo}`,
-            away_name: item.away_name,
-            away_logo: `https://data.bongdaplus.vn/logo/${item.away_logo}`,
-            start_time: item.start_time,
-            goals_home: item.goals_home,
-            goals_away: item.goals_away,
-            status: item.status,
-          })) as MatchItem[];
-          console.log(matches)
-        // --- Bắt đầu nhóm dữ liệu ---
-        // 1. Nhóm theo round_name
+        
+const matches = (rawData.matches as any[]).map(item => {
+    const slugParts = item.slug ? item.slug.split('/') : [];
+    const tournamentFolder = slugParts[0]; 
+    
+    const matchSlug = slugParts[1] || "";
+    const matchParts = matchSlug.split('-');
+    const realMatchId = matchParts[matchParts.length - 1]; 
+
+    return {
+        id: `${tournamentFolder}/${realMatchId}`, 
+        
+        round_name: item.round_name,
+        home_name: item.home_name,
+        home_logo: `https://data.bongdaplus.vn/logo/${item.home_logo}`,
+        away_name: item.away_name,
+        away_logo: `https://data.bongdaplus.vn/logo/${item.away_logo}`,
+        start_time: item.start_time,
+        goals_home: item.goals_home,
+        goals_away: item.goals_away,
+        status: item.status,
+    };
+}) as MatchItem[];
+
+        // --- Logic nhóm dữ liệu giữ nguyên ---
         const roundsMap = groupBy(matches, (m) => m.round_name);
 
-        // 2. Với mỗi vòng, nhóm tiếp theo ngày
         const rounds = Object.entries(roundsMap).map(([roundName, roundMatches]) => {
           const datesMap = groupBy(roundMatches, (m) => getDateString(m.start_time));
           const dates = Object.entries(datesMap).map(([date, matchesInDate]) => ({
@@ -93,19 +105,13 @@ export async function fetchLeaguesMatches() {
           rounds
         };
       } catch (err) {
-        console.warn(`Lỗi khi fetch giải: ${league.name}`, err);
-        return {
-          league_id: league.id,
-          league_name: league.name,
-          rounds: []
-        };
+        return { league_id: league.id, league_name: league.name, rounds: [] };
       }
     });
 
-    const finalData = await Promise.all(requests);
-    return finalData;
+    return await Promise.all(requests);
   } catch (error) {
-    console.error("Lỗi hệ thống tổng thể:", error);
+    console.error("Lỗi hệ thống:", error);
     return [];
   }
 }

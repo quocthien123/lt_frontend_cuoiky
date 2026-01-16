@@ -1,10 +1,14 @@
 
 .bs-scope {
   @import "bootstrap/scss/bootstrap";
-  
+
+
+  /* Reset font để không bị lỗi font hệ thống */
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 16px;
-  
+
+  /* Reset box-sizing để layout chuẩn */
+
   *, *::before, *::after {
     box-sizing: border-box;
   }

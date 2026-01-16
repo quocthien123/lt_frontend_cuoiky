@@ -1,70 +1,55 @@
 
 .gridNews {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 .newsContainer {
-    display: flex;
-    width: 100%; 
+  display: flex;
+  width: 100%;
 }
 .mainColor {
-    background-color: var(--bg-color);
-    color: var(--heading-color); 
+  background-color: var(--bg-color);
+  color: var(--heading-color);
 }
 .newsLeft {
-    width: 30%;
+  width: 30%;
 }
 .listNewsNoImage {
-    display: flex;
-    flex-direction: column;
-    width: 40%;
+  display: flex;
+  flex-direction: column;
+  width: 40%;
 }
 .standingsdiv {
-    width: 30%;
-
+  width: 30%;
 }
-/* HomePage.module.css */
 
-/* Ví dụ về nút đổi màu */
 .themeToggleBtn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 10px 15px;
-    border-radius: 20px;
-    border: 1px solid var(--border-color);
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    cursor: pointer;
-    z-index: 1000;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  border-radius: 20px;
+  padding: 10px 0;
+  height: 40px;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  z-index: 1000;
+  width: 100%;
+  max-width: 200px;
 }
-
 .newsContainer {
-    /* Sử dụng biến thay vì màu cứng */
-    background-color: var(--bg-color); 
+  background-color: var(--bg-color);
 }
 
-/* Đảm bảo các thẻ H2, H3 nhận đúng màu */
-h2, h3 {
-    color: var(--heading-color);
+h2,
+h3 {
+  color: var(--heading-color);
+}
+.newsLeft,
+.listNewsNoImage {
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
-/* Nếu bạn có style riêng cho card trong file này */
-.newsLeft, .listNewsNoImage {
-   background-color: var(--bg-color);
-   color: var(--text-color);
-}
-
-/* HomePage.module.css */
-
-.mainColor {
-    line-height: 1.4;
-    max-width: 1200px; 
-    margin: 0 auto;   
-}
-
-
-h3{
- font-size: 1.2rem !important;
-}

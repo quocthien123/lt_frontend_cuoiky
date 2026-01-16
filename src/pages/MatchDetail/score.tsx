@@ -1,3 +1,5 @@
+// src/pages/MatchDetail/score.tsx
+
 import type { MatchData } from './types';
 
 export default function HeaderScore({ data }: { data: MatchData }) {

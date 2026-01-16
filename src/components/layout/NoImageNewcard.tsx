@@ -8,10 +8,6 @@ interface NoImageProps {
 
 export default function NoImageNewsCard({ title, link, description }: NoImageProps) {
   return (
-  
-
-
-
 
     <div className="card h-100 shadow-sm border-0 bg-white news-card-no-img">
       <div className="card-body d-flex align-items-center p-3">
