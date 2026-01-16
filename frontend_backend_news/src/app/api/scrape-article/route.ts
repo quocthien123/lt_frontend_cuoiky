@@ -2,51 +2,65 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const slug = searchParams.get('slug');
-
-  if (!slug) return NextResponse.json({ success: false, error: "Missing slug" });
-
   try {
-    const targetUrl = `https://bongdaplus.vn/${slug}.html`;
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category');
+    const slug = searchParams.get('slug');
+
+    const urlToScrape = `https://bongdaplus.vn/${category}/${slug}.html`;
     
-    const res = await fetch(targetUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://bongdaplus.vn/'
-      }
+    const res = await fetch(urlToScrape, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0' },
+      cache: 'no-store'
     });
 
     const html = await res.text();
     const $ = cheerio.load(html);
+    const contentBlocks: any[] = [];
 
-    const title = $('.lead-title h1').text().trim();
-    const sapo = $('.summary.bdr').text().trim();
-    
-    let contentElement = $('#postContent.content');
+const title = $('.lead-title h1').text().trim() || 
+              $('h1.title').text().trim() || 
+              $('.detail-title').text().trim() ||
+              $('h1').first().text().trim();
 
-    contentElement.find('script, style, .adweb, .admob').remove();
+    const videoIframe = $('.play-box iframe').attr('src');
+    const videoDesc = $('.clip-info .desc').text().trim();
 
-    contentElement.find('img').each((_, img) => {
-      const $img = $(img);
-      let src = $img.attr('src');
-      if (src && !src.startsWith('http')) {
-        $img.attr('src', `https://bongdaplus.vn${src}`);
+    if (videoIframe) {
+      const fullVideoUrl = videoIframe.startsWith('http') ? videoIframe : `https://bongdaplus.vn${videoIframe}`;
+      contentBlocks.push({ type: 'video', content: fullVideoUrl });
+      
+      if (videoDesc) {
+        contentBlocks.push({ type: 'text', content: videoDesc });
       }
-      $img.addClass('img-fluid rounded shadow-sm my-3 d-block mx-auto');
-      $img.removeAttr('style'); 
+    } else {
+      const mainContent = $('.fck_detail').length > 0 ? $('.fck_detail') : $('#postContent');
+      
+      mainContent.children().each((_, el) => {
+        const $el = $(el);
+        if ($el.hasClass('gm') || $el.find('ins').length > 0) return;
+
+        const img = $el.find('img');
+        if (img.length > 0) {
+          const src = img.attr('data-src') || img.attr('src');
+          if (src && !src.includes('google')) {
+            contentBlocks.push({ type: 'image', content: src });
+          }
+          return;
+        }
+
+        const text = $el.text().trim();
+        if (text.length > 20) {
+          contentBlocks.push({ type: 'text', content: text });
+        }
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: { title, contentBlocks }
     });
-
-    const content = contentElement.html();
-
-    return NextResponse.json({ 
-      success: true, 
-      data: { title, sapo, content } 
-    }, {
-      headers: { 'Access-Control-Allow-Origin': '*' }
-    });
-
   } catch (error) {
-    return NextResponse.json({ success: false, error: "Server Error" });
+    return NextResponse.json({ success: false });
   }
 }

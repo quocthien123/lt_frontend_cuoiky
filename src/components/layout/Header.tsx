@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from "./Header.module.css";
 import { useAuth } from "@/hooks/useAuth";
+import type { NewsItem } from "@/types/news";
 
 interface ChildArticle {
   child_title: string;
@@ -23,18 +24,25 @@ const getSlug = (url: string) => {
 export default function Header() {
    const [theme, setTheme] = useState('light');
   const [menu, setMenus] = useState<Article[]>([]);
+  const [latestNews, setLatestNews] = useState<NewsItem[]>([]); // Lưu tin mới
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
+useEffect(() => {
+    // Gọi API 1: Lấy Danh mục
     fetch("http://localhost:3000/api/bongdaplus")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.data) setMenus(data.data.article);
-      })
-      .catch((err) => console.log("API chưa chạy, menu sẽ tạm trống:", err));
+      .then(res => res.json())
+      .then(data => {
+        if (data?.data?.article) setMenus(data.data.article);
+      });
+
+    // Gọi API 2: Lấy Tin mới
+    fetch("http://localhost:3000/api/news")
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setLatestNews(data.slice(0, 10)); // Lấy 3 tin mới nhất thôi cho gọn
+      });
   }, []);
- 
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme);
@@ -56,7 +64,20 @@ export default function Header() {
               </Link>
             </li>
           ))}
+
+
+
+<li className={styles.news_item}>
+  <Link to="/tin-moi" className={styles.hot_link}>
+    <span className={styles.dot}></span> Tin mới
+  </Link>
+</li>
+
       </ul>
+
+
+
+
 
 
       <div className={styles.dropdown}>
