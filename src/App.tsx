@@ -15,6 +15,7 @@ import MatchDetailPage from "./pages/MatchDetail";
 import FavoritesPage from "./pages/Favorites/FavoritesPage";
 import RecentlyViewedPage from "./pages/RecentlyViewed/RecentlyViewedPage";
 import VideoPage from "./pages/videos/VideoPages";
+import News from "./components/tinmoi/tinmoi";
 
 
 export default function App() {
@@ -51,7 +52,8 @@ export default function App() {
             {/* trang hiển thị videos */}
             <Route path="/danh-muc/video" element={<VideoPage />} />
 
-
+        <Route path="/tin-moi" element={<News />} />
+        <Route path="/:category/:slug" element={<CategoryPage />} />
          
           </Routes>
         </MainLayout>

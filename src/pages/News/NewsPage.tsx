@@ -45,57 +45,66 @@ function CategoryPage() {
     setIsSpeaking(false);
   };
 
-  useEffect(() => {
-    if (!category || !slug) return;
+useEffect(() => {
+  if (!category || !slug) return;
 
-    let isMounted = true;
+  let isMounted = true;
+  setLoading(true);
+  setError(null);
+  stopSpeaking();
 
-    queueMicrotask(() => {
-      if (isMounted) {
-        setLoading(true);
-        setError(null);
-        stopSpeaking();
+  const fetchData = async () => {
+    try {
+      const scraperUrl = `http://localhost:3000/api/get-new-description?category=${category}&slug=${slug}`;
+      
+      let response = await fetch(scraperUrl);
+      let result = await response.json();
+
+
+      if (!result.success || !result.data || result.data.contentBlocks.length === 0) {
+        console.log("Scraper trống, đang gọi API Database...");
+        
+        const dbUrl = `http://localhost:3000/api/scrape-article?category=${category}&slug=${slug}`;
+        response = await fetch(dbUrl);
+        result = await response.json();
       }
-    });
 
-    fetch(
-      `http://localhost:3000/api/get-new-description?category=${category}&slug=${slug}`
-    )
-      .then((res) => {
-        if (!res.ok) throw new Error("Lỗi mạng hoặc server");
-        return res.json();
-      })
-      .then((result) => {
-        if (!isMounted) return;
-        if (result.success && result.data) {
-          setArticle(result.data);
-          {/* Thêm bài viết vào lịch sử đọc */}          
-          if (category && slug) {
-            addToReadingHistory({
-              slug,
-              category,
-              title: result.data.title,
-              thumb: result.data.contentBlocks.find((b: ContentBlock) => b.type === "image")?.content || "",
-            });
-          }
-        } else {
-          throw new Error(result.message || "Không lấy được dữ liệu");
-        }
-      })
-      .catch((err) => {
-        if (!isMounted) return;
-        console.error(err);
-        setError(err.message);
-      })
-      .finally(() => {
-        if (!isMounted) return;
-        setLoading(false);
-      });
+      if (!isMounted) return;
 
-    return () => {
-      isMounted = false;
-    };
-  }, [category, slug]);
+      if (result.success && result.data) {
+        const finalData = {
+          ...result.data,
+          contentBlocks: result.data.contentBlocks || []
+        };
+        
+        setArticle(finalData);
+
+        // Thêm vào lịch sử đọc
+        addToReadingHistory({
+          slug,
+          category,
+          title: finalData.title,
+          thumb: finalData.contentBlocks.find((b: any) => b.type === "image")?.content || "",
+        });
+      } else {
+        throw new Error("Không tìm thấy nội dung bài viết từ cả 2 nguồn.");
+      }
+    } catch (err: any) {
+      if (!isMounted) return;
+      setError(err.message);
+    } finally {
+      if (isMounted) setLoading(false);
+    }
+  };
+
+  fetchData();
+  return () => { isMounted = false; };
+}, [category, slug]);
+
+
+
+
+  
 
   useEffect(() => {
     return () => {
