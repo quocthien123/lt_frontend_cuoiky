@@ -20,7 +20,7 @@ const getSlug = (url: string) => {
 };
 
 export default function Header() {
-
+   const [theme, setTheme] = useState('light');
   const [menu, setMenus] = useState<Article[]>([]);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -33,7 +33,13 @@ export default function Header() {
       })
       .catch((err) => console.log("API chưa chạy, menu sẽ tạm trống:", err));
   }, []);
-
+ 
+    const toggleTheme = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    };
   return (
     <header className={styles.header}>
       <Link className={styles.logo} to="/">
@@ -79,6 +85,10 @@ export default function Header() {
           )}
         </div>
       </div>
+         
+            <button onClick={toggleTheme} className={styles.themeToggleBtn}>
+                {theme === 'light' ? '🌙' : '☀️'}
+            </button>
     </header>
   );
 }
