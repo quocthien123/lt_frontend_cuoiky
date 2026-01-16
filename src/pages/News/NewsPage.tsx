@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 import { toggleFavorite, isArticleLiked } from "@/services/favorite.service.ts";
 import { CommentSection } from "@/components/comments/CommentSection";
+import { addToReadingHistory } from "@/services/reading-history.service";
 
 interface ContentBlock {
   type: "text" | "image" | "caption";
@@ -66,6 +67,15 @@ function CategoryPage() {
         if (!isMounted) return;
         if (result.success && result.data) {
           setArticle(result.data);
+          {/* Thêm bài viết vào lịch sử đọc */}          
+          if (category && slug) {
+            addToReadingHistory({
+              slug,
+              category,
+              title: result.data.title,
+              thumb: result.data.contentBlocks.find((b: ContentBlock) => b.type === "image")?.content || "",
+            });
+          }
         } else {
           throw new Error(result.message || "Không lấy được dữ liệu");
         }

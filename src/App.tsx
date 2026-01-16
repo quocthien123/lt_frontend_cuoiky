@@ -12,6 +12,7 @@ import { Toaster } from "react-hot-toast";
 // Import Layout & Pages
 import MatchDetailPage from "./pages/MatchDetail";
 import FavoritesPage from "./pages/Favorites/FavoritesPage";
+import RecentlyViewedPage from "./pages/RecentlyViewed/RecentlyViewedPage";
 
 export default function App() {
   return (
@@ -29,6 +30,9 @@ export default function App() {
 
             {/* Trang chứa các bài báo yêu thích */}
             <Route path="/favorites" element={<FavoritesPage />} />
+
+            {/* Trang lịch sử đọc */}
+            <Route path="/recently-viewed" element={<RecentlyViewedPage />} />
 
             {/* Chi tiết trận đấu */}
             <Route path="/match/:id" element={<MatchDetailPage />} />
