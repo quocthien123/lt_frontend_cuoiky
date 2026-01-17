@@ -28,3 +28,4 @@ frontend_backend_news/.next/
 dist/
 .env
 
+.env.local

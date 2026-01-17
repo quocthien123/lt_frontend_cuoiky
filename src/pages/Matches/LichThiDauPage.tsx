@@ -4,7 +4,7 @@ import styles from './LichThiDauPage.module.css';
 import { Link } from 'react-router-dom'; // Import Link để chuyển trang
 
 export interface Match {
-  id: string; // Đây là slug từ API (ví dụ: folder/name-id)
+  id: string; 
   home_name: string;
   home_logo: string;
   away_name: string;
@@ -15,7 +15,7 @@ export interface Match {
   status: string;
 }
 
-// ... các interface khác giữ nguyên ...
+
 export interface DateGroup { date: string; matches: Match[]; }
 export interface RoundGroup { round_name: string; dates: DateGroup[]; }
 export interface LeagueGroup { league_id: string; league_name: string; rounds: RoundGroup[]; }
@@ -34,17 +34,16 @@ function findCurrentRoundIndex(rounds: RoundGroup[] | undefined): number {
 function MatchRow({ match }: { match: Match }) {
   const isFinished = match.status == '100';
 
-  // --- LOGIC XỬ LÝ ID SẠCH ---
-  // Tách slug: "mfiws1aoh0uztg4/liverpool-vs-abc-ykcv4illo87xw5u"
+
   const slugParts = match.id ? match.id.split('/') : [];
   const tournamentId = slugParts[0] || "unknown";
   
-  // Lấy matchId thực sự (phần mã 15 ký tự ở cuối cùng sau dấu gạch ngang)
+
   const matchSlug = slugParts[1] || "";
   const matchParts = matchSlug.split('-');
   const realMatchId = matchParts[matchParts.length - 1] || "";
 
-  // Tạo ID sạch để Backend đọc được: "tournament_id/match_id"
+
   const cleanId = `${tournamentId}/${realMatchId}`;
   const detailLink = `/match/${encodeURIComponent(cleanId)}`;
 

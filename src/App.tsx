@@ -17,8 +17,8 @@ import RecentlyViewedPage from "./pages/RecentlyViewed/RecentlyViewedPage";
 import VideoPage from "./pages/videos/VideoPages";
 import News from "./components/tinmoi/tinmoi";
 
-
 export default function App() {
+
   return (
     <AuthProvider>
       <Toaster position="top-right" />

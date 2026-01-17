@@ -1,4 +1,4 @@
-//cập nhật trận đấu
+//cập nhật trận đ
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -41,7 +41,7 @@ export function UpcomingMatchesCell({ match }: { match: UpcomingMatch }) {
       {/* 2. Body: Danh sách 2 đội */}
       <div className="card-body p-2 bg-white rounded-bottom pt-0">
         
-        <div className="d-flex flex-column gap-2 border rounded p-2" style={{backgroundColor: '#f8f9fa'}}>
+        <div className="d-flex flex-column gap-2 border rounded p-2 cart-body" >
             
             {/* Đội Nhà */}
             <Link to={detailLink} className="d-flex justify-content-between align-items-center text-decoration-none text-dark p-1 rounded hover-bg-light">

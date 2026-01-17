@@ -7,6 +7,7 @@ import Standings, { type RankingGroup } from "./Standing/StandingPage";
 import UpcomingMatchesLayout from "./Matches/UpcomingMatches";
 import type { LeagueGroup } from "./Matches/LichThiDauPage";
 import Schedule from "./Matches/LichThiDauPage";
+import SubscribePage from "@/components/mail/NewsletterForm";
 interface NewsItem {
   id: string;
   imageUrl?: string;
@@ -173,6 +174,8 @@ export default function HomePage() {
             ))}
         </div>
       </div>
+
+      <SubscribePage />
     </div>
   );
 }

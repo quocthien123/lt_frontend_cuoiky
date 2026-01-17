@@ -10,6 +10,17 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src')
     }
-  }
+  },
+
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Tắt các cảnh báo cũ của Bootstrap
+        quietDeps: true,
+        // Chặn các cảnh báo cụ thể về hàm toàn cục
+        silenceDeprecations: ['global-builtin', 'color-functions', 'import'],
+      },
+    },
+  },
 })
 
