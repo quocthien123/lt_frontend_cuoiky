@@ -2,11 +2,13 @@
 .gridNews {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  gap: 1.2rem;
+
 }
 .newsContainer {
   display: flex;
   width: 100%;
+
 }
 .mainColor {
   background-color: var(--bg-color);
@@ -41,6 +43,8 @@
 }
 .newsContainer {
   background-color: var(--bg-color);
+  max-width: 1300px;
+  margin: auto;
 }
 
 h2,
